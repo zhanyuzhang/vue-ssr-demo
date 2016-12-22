@@ -1,0 +1,22 @@
+import {createApp} from './main';
+import remHelper from '../../../lib/remHelper'
+import native from '../../../lib/native'
+import DownloadBar from '../../../components/mobile/download-bar-black'
+
+export default createApp({
+    el: '#app',
+    created: function () {
+        remHelper.init(720);
+    },
+    components: {
+        'download-bar': DownloadBar
+    },
+    methods: {
+        downloadByAndroid () {
+            native.download('404页面', 'android')
+        },
+        downloadByIOS () {
+            native.download('404页面', 'ios')
+        }
+    }
+})

@@ -1,0 +1,134 @@
+$default-font-color:#2e2e2e;
+$main-color:#ffaf1a;
+
+$gray:#999;
+$light-gray:#ccc;
+
+@mixin icon-bg($width, $height, $url, $position: center, $bgcolor: transparent){
+  width:$width;height:$height;background:url($url) no-repeat $position;background-color:$bgcolor;
+}
+
+@mixin filled-img{
+  img{width:100%;height:100%;display: block;}
+}
+
+@mixin absolute-box($width, $height, $left: auto, $top: auto, $bottom: auto, $right: auto){
+  width:$width;height:$height;position:absolute;left:$left;top:$top;bottom:$bottom;right:$right;
+}
+
+@mixin center-absolute-box($width, $height: $width){
+  width:$width;height:$height;position:absolute;left:50%;top:50%;margin-left:-$width/2;margin-top:-$height/2;
+}
+
+@mixin border-triangle($border-width,$direction,$color){
+  width: 0;height: 0;line-height: 0;font-size: 0;overflow: hidden;display:block;border-style:dashed;border-color:transparent;border-width:$border-width;
+  border-#{$direction}-style:solid;border-#{$direction}-color:$color;
+}
+
+@mixin justify-box{
+  text-align:justify;font-size:0;line-height:1.2;
+  &:after{width:100%;height:0;overflow: hidden;content:'';display: inline-block;}
+}
+
+@mixin css-icon-cross($width,$color:#fff,$granularity:2px,$height:$width,$border-radius:0){
+  width:$width;height:$height;position:relative;
+  &:before,
+  &:after{content:'';background:$color;border-radius:$border-radius;position:absolute;top:0;left:0;bottom:0;right:0;margin:auto;}
+  &:before{width:100%;height:$granularity;}
+  &:after{width:$granularity;height:100%;}
+}
+
+@mixin dialog-wrapper($background:'/dev/images/common/dialog-cover.png'){
+  width:100%;height:100%;position:fixed;top:0;left:0;background:url($background);z-index:10;
+}
+
+@mixin bolo-btn($width,$height,$color:$default-font-color,$background:$main-color){
+  width:$width;height:$height;line-height:$height;color:$color;text-align: center;background:$background;border-radius:2px;cursor:pointer;
+  &:active{background:#ffd17b;}
+}
+
+@mixin circle-avatar($size){
+  width:$size;height:$size;border-radius:100%;overflow: hidden;
+  img{width:100%;height:100%;display: block;}
+}
+
+@mixin text-input{
+  border:1px solid #e5e5e5;border-radius:2px;overflow: hidden;padding:0 8px;height:28px;position:relative;
+  input{background:none;width:100%;border:0;display: block;height:20px;margin-top:4px;padding:0;}
+}
+
+@mixin input-placeholder {
+  &::-webkit-input-placeholder {
+    /* WebKit browsers */
+    @content
+  }
+  &:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    @content
+  }
+  &::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    @content
+  }
+  &:-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    @content
+  }
+}
+
+@mixin bg-linear-gradient($d,$c1,$c2) {
+  background: -webkit-linear-gradient($d, $c1, $c2);
+  background: -moz-linear-gradient($d, $c1, $c2);
+  background: -ms-linear-gradient($d, $c1, $c2);
+  background: -o-linear-gradient($d, $c1, $c2);
+  background: linear-gradient($d, $c1, $c2);
+}
+
+@mixin transform($property) {
+  -webkit-transform: $property;
+  -moz-transform: $property;
+  -ms-transform: $property;
+  -o-transform: $property;
+  transform: $property;
+}
+
+@mixin transition-transform($property) {
+  -webkit-transition: -webkit-transform $property;
+  -moz-transition: -moz-transform $property;
+  -ms-transition: -ms-transform $property;
+  -o-transition: -o-transform $property;
+  transition: transform $property;
+}
+
+@mixin transition-normal($property) {
+  -webkit-transition: $property;
+  -moz-transition: $property;
+  -ms-transition: $property;
+  -o-transition: $property;
+  transition: $property;
+}
+
+@mixin animation($property) {
+  -webkit-animation: $property;
+  -moz-animation: $property;
+  -o-animation: $property;
+  animation: $property;
+}
+
+@mixin keyframe($name) {
+  @-webkit-keyframes #{$name} {
+    @content
+  }
+  @-moz-keyframes  #{$name} {
+    @content
+  }
+  @-o-keyframes #{$name} {
+    @content
+  }
+  @keyframes  #{$name} {
+    @content
+  }
+}
+
+
+
