@@ -20,8 +20,8 @@
   </div>
 </template>
 <style  lang="sass" rel="stylesheet/scss">
-  @import "../../../sass-common/mobile/base";
-  @import "../../../sass-common/mobile/ui";
+  @import "../../sass-common/base";
+  @import "../../sass-common/ui";
 
   $ticket-bg:'./images/ticket-bg.png';
   $icon-point:'./images/icon-point.png';
@@ -94,7 +94,7 @@
   }
 </style>
 <script>
-    import DownloadBar from '../../../components/mobile/download-bar-orange/index.vue'
+    import DownloadBar from '../../components/download-bar-orange/index.vue'
     export default {
         name: 'invitation-video',
         components: {

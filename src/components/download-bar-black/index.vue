@@ -41,7 +41,7 @@
 </style>
 
 <script>
-import native from '../../../lib/native';
+import native from '../../lib/native';
     export default {
         name: 'download-bar-black',
         methods: {

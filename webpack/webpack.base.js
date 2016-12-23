@@ -31,7 +31,7 @@ var config = {
             },
             {
                 test: /\.(png|jpg|gif|svg)$/,
-                loader:'url?limit=100&name=/images/[name]-[hash].[ext]'
+                loader:'url?limit=1000&name=/images/[name]-[hash:10].[ext]'
             }
         ]
     }
@@ -53,8 +53,8 @@ function getEntries(globPath) {
     return entries;
 }
 
-var clientEntries = getEntries(path.join(projectRoot, 'src/pages/mobile/**/entry-client.js'));
-var serverEntries = getEntries(path.join(projectRoot, 'src/pages/mobile/**/entry-server.js'));
+var clientEntries = getEntries(path.join(projectRoot, 'src/pages/**/entry-client.js'));
+var serverEntries = getEntries(path.join(projectRoot, 'src/pages/**/entry-server.js'));
 
 Object.keys(clientEntries).forEach(function(name) {
     console.log(clientEntries[name])

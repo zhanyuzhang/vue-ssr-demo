@@ -1,7 +1,7 @@
 import axios from 'axios'
-import queryString from '../../../lib/querystring'
-import httpHelper from '../../../lib/HttpHelper'
-import remHelper from '../../../lib/remHelper'
+import queryString from '../../lib/querystring'
+import httpHelper from '../../lib/HttpHelper'
+import remHelper from '../../lib/remHelper'
 const userId = queryString.parse(location.search).userId
 const origin = httpHelper.getOrigin() + '/'
 import {createApp} from './main';

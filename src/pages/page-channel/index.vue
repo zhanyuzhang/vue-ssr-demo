@@ -37,7 +37,7 @@
   import channelInfo from './channel-info/index.vue'
   import setInfo from './set-info/index.vue'
   import videoInfo from './video-info/index.vue'
-  import downloadBar from '../../../components/mobile/download-bar-orange/index.vue'
+  import downloadBar from '../../components/download-bar-orange/index.vue'
 
   export default {
     name: 'channel',

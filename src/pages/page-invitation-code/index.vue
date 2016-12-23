@@ -16,8 +16,8 @@
   </div>
 </template>
 <style  lang="sass" rel="stylesheet/scss">
-  @import "../../../sass-common/mobile/base";
-  @import "../../../sass-common/mobile/ui";
+  @import "../../sass-common/base";
+  @import "../../sass-common/ui";
 
   $tip-img:'./images/tip-img.png';
 

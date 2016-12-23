@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 初始化路由
+// init router
 require('./routes/init')(express, app);
 
 // catch 404 and forward to error handler

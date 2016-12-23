@@ -1,10 +1,10 @@
 import {createApp} from './main';
 import axios from 'axios'
-import httpHelper from '../../../lib/HttpHelper'
-import queryString from '../../../lib/querystring'
-import native from  '../../../lib/native'
-import stat from '../../../lib/Stat'
-import remHelper from '../../../lib/remHelper'
+import httpHelper from '../../lib/HttpHelper'
+import queryString from '../../lib/querystring'
+import native from  '../../lib/native'
+import stat from '../../lib/Stat'
+import remHelper from '../../lib/remHelper'
 
 const origin = httpHelper.getOrigin() + '/';
 export default createApp({

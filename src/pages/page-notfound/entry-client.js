@@ -1,7 +1,7 @@
 import {createApp} from './main';
-import remHelper from '../../../lib/remHelper'
-import native from '../../../lib/native'
-import DownloadBar from '../../../components/mobile/download-bar-black'
+import remHelper from '../../lib/remHelper'
+import native from '../../lib/native'
+import DownloadBar from '../../components/download-bar-black'
 
 export default createApp({
     el: '#app',
