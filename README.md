@@ -15,5 +15,5 @@ node, express, webpack, babel...
 ``` http://localhost:3000/m/invitation/video ```
 ##### the code invitation page
 ``` http://localhost:3000/m/invitation/code ```
-##### 404 page
+##### 404 pagev
 ``` http://localhost:3000/m/notfound ```

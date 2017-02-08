@@ -53,6 +53,10 @@ function getEntries(globPath) {
     return entries;
 }
 
+// file[name]: md5
+
+
+
 var clientEntries = getEntries(path.join(projectRoot, 'src/pages/**/entry-client.js'));
 var serverEntries = getEntries(path.join(projectRoot, 'src/pages/**/entry-server.js'));
 
