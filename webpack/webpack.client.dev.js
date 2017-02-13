@@ -3,6 +3,11 @@ const projectRoot = path.resolve(__dirname, '../');
 const webpack = require('webpack');
 const base = require('./webpack.base');
 const config = Object.assign({}, base, {
+    resolve: {
+        alias: Object.assign({}, base.resolve.alias, {
+            'httpHelper': '/src/lib/httpHelper.js'
+        })
+    },
     entry: base.clientEntry,
     output: {
         path: path.join(projectRoot, 'public'),

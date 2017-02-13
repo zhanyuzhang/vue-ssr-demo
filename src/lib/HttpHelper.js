@@ -1,8 +1,8 @@
 import qs from './querystring';
 var QUERY = qs.parse();
 
-//var defaultTestHost = 'test.bolo.bobo.com',
-var defaultTestHost = location.host.match(/test\.bolo\.bobo\.com/) ? 'test.bolo.bobo.com' : (/local/.test(location.href) ? 'testbolo.163.com' : 'preview.bobo.com:85'),
+var defaultTestHost = 'preview.bobo.com:85',
+// var defaultTestHost = location.host.match(/test\.bolo\.bobo\.com/) ? 'test.bolo.bobo.com' : (/local/.test(location.href) ? 'testbolo.163.com' : 'preview.bobo.com:85'),
   defaultOfficialHost = 'bolo.bobo.com',
   newOfficialHost = 'bolo.163.com';
 

@@ -4,6 +4,11 @@ const path = require('path');
 const projectRoot = path.resolve(__dirname, '../');
 
 module.exports = Object.assign({}, base, {
+    resolve: {
+        alias: Object.assign({}, base.resolve.alias, {
+            'httpHelper': '/src/lib/httpHelper-server.js'
+        })
+    },
     target: 'node',
     devtool: null,
     entry: base.serverEntry,
