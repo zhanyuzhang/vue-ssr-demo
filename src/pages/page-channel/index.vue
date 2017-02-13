@@ -1,13 +1,13 @@
 <template>
-  <div class="wrapper" @scroll="loadMore($event)" v-bind:data-id="userId" id="app" v-show="canShow">
+  <div class="wrapper" @scroll="loadMore($event)" v-bind:data-id="userId" id="app" v-show="showState">
     <channel-info v-bind:channelInfo="channelInfo"></channel-info>
     <div class="channel-set">
-      <template v-for="setInfo in channelSet">
+      <template v-for="setInfo in lists.setList">
         <set-info v-bind:setInfo="setInfo" v-bind:activeSid="activeSid" v-on:changeSet="changeSet"></set-info>
       </template>
     </div>
     <div class="channel-video-list">
-      <template v-for="videoInfo in videoList">
+      <template v-for="videoInfo in lists.videoList">
         <video-info v-bind:videoInfo="videoInfo"></video-info>
       </template>
     </div>
@@ -46,21 +46,6 @@
       'set-info': setInfo,
       'video-info': videoInfo,
       'download-bar': downloadBar
-    },
-    data: function () {
-      return {
-        channelInfo: {},
-        channelSet: [],
-        videoList: [],
-        pageNum: 1,
-        pageSize: 10,
-        sid: null,
-        activeSid: null,
-        isLoading: false,
-        isAll: false,
-        userId: null,
-        canShow: false
-      }
-    },
+    }
   }
 </script>

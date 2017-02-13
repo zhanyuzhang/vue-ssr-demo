@@ -52,13 +52,13 @@ module.exports =
 	    value: true
 	});
 
-	exports.default = function (options) {
+	exports.default = function (context) {
 	    return new Promise(function (resolve) {
-	        resolve((0, _main.createApp)(options));
+	        resolve((0, _main.createApp)());
 	    });
 	};
 
-	var _main = __webpack_require__(57);
+	var _main = __webpack_require__(61);
 
 /***/ },
 
@@ -69,7 +69,7 @@ module.exports =
 
 /***/ },
 
-/***/ 6:
+/***/ 7:
 /***/ function(module, exports) {
 
 	/*
@@ -126,10 +126,10 @@ module.exports =
 
 /***/ },
 
-/***/ 7:
+/***/ 8:
 /***/ function(module, exports, __webpack_require__) {
 
-	var listToStyles = __webpack_require__(8)
+	var listToStyles = __webpack_require__(9)
 
 	module.exports = function (parentId, list, isProduction) {
 	  if (typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
@@ -214,7 +214,7 @@ module.exports =
 
 /***/ },
 
-/***/ 8:
+/***/ 9:
 /***/ function(module, exports) {
 
 	/**
@@ -248,7 +248,7 @@ module.exports =
 
 /***/ },
 
-/***/ 9:
+/***/ 10:
 /***/ function(module, exports) {
 
 	module.exports = function normalizeComponent (
@@ -302,7 +302,7 @@ module.exports =
 
 /***/ },
 
-/***/ 57:
+/***/ 61:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -316,15 +316,15 @@ module.exports =
 
 	var _vue2 = _interopRequireDefault(_vue);
 
-	var _index = __webpack_require__(58);
+	var _index = __webpack_require__(62);
 
 	var _index2 = _interopRequireDefault(_index);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var createApp = function createApp(options) {
+	var createApp = function createApp(req, res, options) {
 	    var VueApp = _vue2.default.extend(_index2.default);
-	    return new VueApp(Object.assign({}, options || null));
+	    return new VueApp(Object.assign({}, options || {}));
 	};
 
 	exports.Vue = _vue2.default;
@@ -332,18 +332,18 @@ module.exports =
 
 /***/ },
 
-/***/ 58:
+/***/ 62:
 /***/ function(module, exports, __webpack_require__) {
 
 	
 	/* styles */
-	__webpack_require__(59)
+	__webpack_require__(63)
 
-	var Component = __webpack_require__(9)(
+	var Component = __webpack_require__(10)(
 	  /* script */
-	  __webpack_require__(64),
+	  __webpack_require__(68),
 	  /* template */
-	  __webpack_require__(65),
+	  __webpack_require__(69),
 	  /* scopeId */
 	  "data-v-44f7afbe",
 	  /* cssModules */
@@ -358,57 +358,57 @@ module.exports =
 
 /***/ },
 
-/***/ 59:
+/***/ 63:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(60);
+	var content = __webpack_require__(64);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	if(content.locals) module.exports = content.locals;
 	// add CSS to SSR context
-	__webpack_require__(7)("ba3cc334", content, false);
+	__webpack_require__(8)("45f8be53", content, false);
 
 /***/ },
 
-/***/ 60:
+/***/ 64:
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(6)();
+	exports = module.exports = __webpack_require__(7)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "\n.wrapper[data-v-44f7afbe] {\n  height: 100%;\n  padding-bottom: 1.4rem;\n  background: #ffaf1a;\n  position: relative;\n  background: url(" + __webpack_require__(61) + ") no-repeat;\n  background-size: 100%;\n  width: 7.20rem;\n}\n.wrapper .android-btn[data-v-44f7afbe], .wrapper .ios-btn[data-v-44f7afbe] {\n    position: absolute;\n    left: 3.44rem;\n    top: 7.35rem;\n    width: 2.83rem;\n    height: .81rem;\n}\n.wrapper .android-btn[data-v-44f7afbe] {\n    background: url(" + __webpack_require__(62) + ") no-repeat;\n    background-size: 100%;\n}\n.wrapper .ios-btn[data-v-44f7afbe] {\n    top: 6.19rem !important;\n    background: url(" + __webpack_require__(63) + ") no-repeat;\n    background-size: 100%;\n}\n", ""]);
+	exports.push([module.id, "\n.wrapper[data-v-44f7afbe] {\n  height: 100%;\n  padding-bottom: 1.4rem;\n  background: #ffaf1a;\n  position: relative;\n  background: url(" + __webpack_require__(65) + ") no-repeat;\n  background-size: 100%;\n  width: 7.20rem;\n}\n.wrapper .android-btn[data-v-44f7afbe], .wrapper .ios-btn[data-v-44f7afbe] {\n    position: absolute;\n    left: 3.44rem;\n    top: 7.35rem;\n    width: 2.83rem;\n    height: .81rem;\n}\n.wrapper .android-btn[data-v-44f7afbe] {\n    background: url(" + __webpack_require__(66) + ") no-repeat;\n    background-size: 100%;\n}\n.wrapper .ios-btn[data-v-44f7afbe] {\n    top: 6.19rem !important;\n    background: url(" + __webpack_require__(67) + ") no-repeat;\n    background-size: 100%;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
 
-/***/ 61:
+/***/ 65:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "/images/bg-0d386f7c9b.png";
 
 /***/ },
 
-/***/ 62:
+/***/ 66:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "/images/android_download-1a8453dc5e.png";
 
 /***/ },
 
-/***/ 63:
+/***/ 67:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "/images/ios_download-8d7b638a7e.png";
 
 /***/ },
 
-/***/ 64:
+/***/ 68:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -456,7 +456,7 @@ module.exports =
 
 /***/ },
 
-/***/ 65:
+/***/ 69:
 /***/ function(module, exports) {
 
 	module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;

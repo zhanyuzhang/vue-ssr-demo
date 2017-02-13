@@ -26,13 +26,14 @@ require('./routes/init')(express, app);
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
-  /mobile/i.test(req.headers['user-agent'].toLowerCase()) ? res.redirect('/m/notfound') : res.redirect('/notfound');
+  /mobile/i.test(req.headers['user-agent'].toLowerCase()) ? res.redirect('/m/notfound') : res.redirect('/m/notfound');
   next(err);
 });
 
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
+  console.log(err);
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 

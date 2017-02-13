@@ -32,6 +32,10 @@ var config = {
             {
                 test: /\.(png|jpg|gif|svg)$/,
                 loader:'url?limit=1000&name=/images/[name]-[hash:10].[ext]'
+            },
+            {
+                test: /\.json$/,
+                loader: 'json'
             }
         ]
     }

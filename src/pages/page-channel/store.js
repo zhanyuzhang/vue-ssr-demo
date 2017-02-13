@@ -1,109 +1,141 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+// import axios from 'axios'
+import fetch from 'fetch-polyfill'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
-        activeType: null,
-        itemsPerPage: 20,
-        items: {/* [id: number]: Item */},
-        users: {/* [id: string]: User */},
+        pageNum: 1, // 页码
+        pageSize: 10, // 每页的数据量
+        loadingState: false, // 加载状态，是否正在加载数据
+        showState: false, // 页面是否可见，用来避免出现无样式的内容
+        completeState: false, // 是否已经加载了全部的视频？
+        sid: null, // 选集ID
+        activeSid: null, // 当前的选集ID
+        userId: null, // 用户/频道ID
+        origin: null, // 域名
+        channelInfo: null,
         lists: {
-            top: [/* number */],
-            new: [],
-            show: [],
-            ask: [],
-            job: []
+            setList: [], // 选集列表
+            videoList: [] // 视频列表
         }
     },
-
     actions: {
-        // ensure data for rendering given list type
-        FETCH_LIST_DATA: ({ commit, dispatch, state }, { type }) => {
-            commit('SET_ACTIVE_TYPE', { type })
-            return fetchIdsByType(type)
-                .then(ids => commit('SET_LIST', { type, ids }))
-                .then(() => dispatch('ENSURE_ACTIVE_ITEMS'))
-        },
-
-        // ensure all active items are fetched
-        ENSURE_ACTIVE_ITEMS: ({ dispatch, getters }) => {
-            return dispatch('FETCH_ITEMS', {
-                ids: getters.activeIds
-            })
-        },
-
-        FETCH_ITEMS: ({ commit, state }, { ids }) => {
-            // on the client, the store itself serves as a cache.
-            // only fetch items that we do not already have, or has expired (3 minutes)
-            const now = Date.now()
-            ids = ids.filter(id => {
-                const item = state.items[id]
-                if (!item) {
-                    return true
+        GET_CHANNEL_INFO: function (context) {
+            return axios.get(`${context.state.origin}/bolo/api/public/userInfo.htm`, {
+                params: {
+                    targetUserId: context.state.userId
                 }
-                if (now - item.__lastUpdated > 1000 * 60 * 3) {
-                    return true
-                }
-                return false
-            })
-            if (ids.length) {
-                return fetchItems(ids).then(items => commit('SET_ITEMS', { items }))
-            } else {
-                return Promise.resolve()
-            }
+            }).then(function (res) {
+                context.commit({
+                    type: 'SET_CHANNEL_INFO',
+                    channelInfo: res.data
+                });
+                return res;
+            });
         },
-
-        FETCH_USER: ({ commit, state }, { id }) => {
-            return state.users[id]
-                ? Promise.resolve(state.users[id])
-                : fetchUser(id).then(user => commit('SET_USER', { user }))
+        GET_SET_LIST: function (context) {
+            return axios.get(`${context.state.origin}/bolo/api/channel/setList.htm`, {
+                params: {
+                    userId: context.state.userId
+                }
+            }).then(function (res) {
+                if(res.data.length) {
+                    context.commit({
+                        type: 'SET_SET_LIST',
+                        setList: res.data
+                    });
+                    context.commit({
+                        type: 'SET_SID',
+                        sid: res.data[0].sid
+                    });
+                    context.commit({
+                        type: 'SET_ACTIVE_SID',
+                        activeSid: res.data[0].sid
+                    });
+                }
+                return res;
+            });
+        },
+        GET_VIDEO_lIST: function (context) {
+            const state = context.state;
+            const url = `${context.state.origin}/bolo/api/channel/${state.lists.setList.length ? 'setVideoList.htm' : 'videoList.htm'}`;
+            context.commit({
+                type: 'SET_LOADING_STATE',
+                loadingState: true
+            });
+            context.commit({
+                type: 'SET_PAGE_NUM',
+            });
+            return axios.get(url, {
+                params: {
+                    pageNum: state.pageNum,
+                    pageSize: state.pageSize,
+                    sid: state.sid,
+                    userId: state.userId
+                }
+            }).then(function (res) {
+                context.commit({
+                    type: 'SET_LOADING_STATE',
+                    loadingState: false
+                });
+                if(res.data.length < state.pageSize) {
+                    context.commit({
+                        type: 'SET_COMPLETE_STATE',
+                        completeState: true
+                    });
+                }
+                res.data.forEach(function (e) {
+                    state.videoList.push(e);
+                });
+            });
         }
     },
 
     mutations: {
-        SET_ACTIVE_TYPE: (state, { type }) => {
-            state.activeType = type
+        SET_CHANNEL_INFO: (state, payload) => {
+            Object.assign(state.channelInfo, payload.channelInfo);
+        },
+        SET_VIDEO_LIST: (state, payload) => {
+            state.lists.videoList = payload.vieoList;
+        },
+        SET_SET_LIST: (state, payload) => {
+            state.lists.setList = payload.setList;
+        },
+        SET_PAGE_NUM: (state, payload) => {
+            if(payload && payload.pageNum)
+                state.pageNum = payload.pageNum;
+            else
+                state.pageNum++;
+        },
+        SET_SID: (state, payload) => {
+            state.sid = payload.sid;
+        },
+        SET_ACTIVE_SID: (state, payload) => {
+            state.activeSid = payload.activeSid;
+        },
+        SET_LOADING_STATE: (state, payload) => {
+            state.loadingState = payload.loadingState;
+        },
+        SET_SHOW_STATE: (state, payload) => {
+            state.showState = payload.showState;
+        },
+        SET_COMPLETE_STATE: (state, payload) => {
+            state.completeState = payload.completeState;
+        },
+        SET_USER_ID: (state, payload) => {
+            state.userId = payload.userId;
+        },
+        SET_ORIGIN: (state, payload) => {
+            state.origin = payload.origin;
         },
 
-        SET_LIST: (state, { type, ids }) => {
-            state.lists[type] = ids
-        },
-
-        SET_ITEMS: (state, { items }) => {
-            items.forEach(item => {
-                if (item) {
-                    Vue.set(state.items, item.id, item)
-                }
-            })
-        },
-
-        SET_USER: (state, { user }) => {
-            Vue.set(state.users, user.id, user)
-        }
     },
 
     getters: {
-        // ids of the items that should be currently displayed based on
-        // current list type and current pagination
-        activeIds (state) {
-            const { activeType, itemsPerPage, lists } = state
-            const page = Number(state.route.params.page) || 1
-            if (activeType) {
-                const start = (page - 1) * itemsPerPage
-                const end = page * itemsPerPage
-                return lists[activeType].slice(start, end)
-            } else {
-                return []
-            }
-        },
 
-        // items that should be currently displayed.
-        // this Array may not be fully fetched.
-        activeItems (state, getters) {
-            return getters.activeIds.map(id => state.items[id]).filter(_ => _)
-        }
     }
 })
 

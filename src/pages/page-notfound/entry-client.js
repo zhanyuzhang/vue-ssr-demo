@@ -1,7 +1,7 @@
 import {createApp} from './main';
 import remHelper from '../../lib/remHelper'
 import native from '../../lib/native'
-import DownloadBar from '../../components/download-bar-black'
+import DownloadBar from '../../components/download-bar-black/index.vue'
 
 export default createApp({
     el: '#app',

@@ -1,6 +1,6 @@
 import {createApp} from './main';
-export default function (options) {
+export default function (context) {
     return new Promise(resolve => {
-        resolve(createApp(options));
+        resolve(createApp());
     });
 }
