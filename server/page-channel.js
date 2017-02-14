@@ -154,7 +154,6 @@ module.exports =
 	                var viewHeight = parseInt(getComputedStyle(wrapper, null).height);
 	                return scrollTop + viewHeight >= scrollHeight - 10 ? true : false;
 	            }
-
 	        }, (0, _vuex.mapActions)({
 	            getChannelInfo: _types2.default.GET_CHANNEL_INFO
 	        }), (0, _vuex.mapActions)({

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { mapMutations } from 'vuex'
+import { mapMutations2 } from 'vuex'
 import { mapActions } from 'vuex'
 import { mapState } from 'vuex'
 import App from './index.vue'
@@ -64,7 +64,6 @@ const createApp = function createApp(options) {
                 let viewHeight = parseInt(getComputedStyle(wrapper, null).height);
                 return scrollTop + viewHeight >= scrollHeight - 10 ? true : false;
             },
-
             ...mapActions({
                 getChannelInfo: types.GET_CHANNEL_INFO
             }),

@@ -1,52 +1,40 @@
 const path = require('path');
 const projectRoot = path.resolve(__dirname, '../');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const base = require('./webpack.base');
 
 const config = Object.assign({}, base, {
-    resolve: {
-        alias: Object.assign({}, base.resolve.alias, {
-            'httpHelper': '/src/lib/httpHelper.js'
-        })
-    },
     entry: base.clientEntry,
+    devtool: null,
     output: {
         path: path.join(projectRoot, 'public'),
-        filename: "scripts/[name].js"
-    },
-    // vue : {
-    //     loaders : {
-    //         sass : ExtractTextPlugin.extract('vue-style-loader', 'css-loader', 'sass-loader')
-    //     }
-    // },
-    // vue: {
-    //     loaders: {
-    //         css: ExtractTextPlugin.extract("css"),
-    //         // you can also include <style lang="less"> or other langauges
-    //         sass: ExtractTextPlugin.extract("css!sass")
-    //     }
-    // },
-    plugins: [
-        // new ExtractTextPlugin('styles/[name]/index.css'),
-        new webpack.DefinePlugin({
-            'isBrowser': true
-        })
-    ]
+        filename: "scripts/[name]-[hash:10].js",
+        publicPath: 'http://img1.cache.netease.com/bobo/release/'
+    }
 });
 
-config.devtool = null;
 
 config.plugins.push(
-        // new webpack.LoaderOptionsPlugin({
-        //     minimize: true
-        // }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
-        })
+    new webpack.optimize.UglifyJsPlugin({
+        compress: {
+            warnings: false
+        }
+    }),
+    new webpack.DefinePlugin({
+        'isBrowser': true
+    })
 );
+
+// 生成对应的html
+Object.keys(config.entry).forEach(function(name) {
+    config.plugins.push(new HtmlWebpackPlugin({
+        filename: name + '.html',
+        template: './templates/default-mobile.html',
+        inject: true,
+        chunks: [name]
+    }));
+});
 
 module.exports = config;

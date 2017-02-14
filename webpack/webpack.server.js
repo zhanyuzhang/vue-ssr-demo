@@ -3,12 +3,7 @@ const base = require('./webpack.base');
 const path = require('path');
 const projectRoot = path.resolve(__dirname, '../');
 
-module.exports = Object.assign({}, base, {
-    resolve: {
-        alias: Object.assign({}, base.resolve.alias, {
-            'httpHelper': '/src/lib/httpHelper-server.js'
-        })
-    },
+const config = Object.assign({}, base, {
     target: 'node',
     devtool: null,
     entry: base.serverEntry,
@@ -18,10 +13,13 @@ module.exports = Object.assign({}, base, {
         libraryTarget: 'commonjs2'
     },
     externals: Object.keys(require('../package.json').dependencies),
-    plugins: [
-        new webpack.DefinePlugin({
-            'process.env.VUE_ENV': '"server"',
-            'isBrowser': false
-        })
-    ]
 });
+
+config.plugins.push(new webpack.DefinePlugin({
+    'process.env.VUE_ENV': '"server"',
+    'isBrowser': false
+}));
+
+
+
+module.exports = config;

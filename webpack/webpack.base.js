@@ -1,7 +1,6 @@
 const path = require('path');
 const projectRoot = path.resolve(__dirname, '../');
-var glob = require('glob');
-// var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const glob = require('glob');
 
 var config = {
     projectRoot: projectRoot,
@@ -38,7 +37,8 @@ var config = {
                 loader: 'json'
             }
         ]
-    }
+    },
+    plugins: []
 };
 
 
@@ -57,20 +57,15 @@ function getEntries(globPath) {
     return entries;
 }
 
-// file[name]: md5
-
-
 
 var clientEntries = getEntries(path.join(projectRoot, 'src/pages/**/entry-client.js'));
 var serverEntries = getEntries(path.join(projectRoot, 'src/pages/**/entry-server.js'));
 
 Object.keys(clientEntries).forEach(function(name) {
-    console.log(clientEntries[name])
     config.clientEntry[name] = clientEntries[name];
 });
 
 Object.keys(serverEntries).forEach(function(name) {
-    console.log(serverEntries[name])
     config.serverEntry[name] = serverEntries[name];
 });
 
