@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { mapMutations2 } from 'vuex'
+import { mapMutations } from 'vuex'
 import { mapActions } from 'vuex'
 import { mapState } from 'vuex'
 import App from './index.vue'

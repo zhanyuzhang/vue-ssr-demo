@@ -1366,8 +1366,9 @@ module.exports =
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-	if (true) _vue2.default.use(_vuex2.default);
-	console.log((false));
+	if (true) {
+	    _vue2.default.use(_vuex2.default);
+	}
 	var store = new _vuex2.default.Store({
 	    state: {
 	        pageNum: 1, // 页码

@@ -3,9 +3,9 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import types from './types'
 
-if(!isBrowser)
+if(!isBrowser) {
     Vue.use(Vuex)
-console.log(isBrowser);
+}
 const store = new Vuex.Store({
     state: {
         pageNum: 1, // 页码
