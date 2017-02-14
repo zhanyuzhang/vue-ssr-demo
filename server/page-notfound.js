@@ -322,7 +322,7 @@ module.exports =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var createApp = function createApp(req, res, options) {
+	var createApp = function createApp(options) {
 	    var VueApp = _vue2.default.extend(_index2.default);
 	    return new VueApp(Object.assign({}, options || {}));
 	};
