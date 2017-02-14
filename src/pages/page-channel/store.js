@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import axios from 'axios'
-import fetch from 'fetch-polyfill'
+import axios from 'axios'
+import types from './types'
 
-Vue.use(Vuex)
-
+if(!isBrowser)
+    Vue.use(Vuex)
+console.log(isBrowser);
 const store = new Vuex.Store({
     state: {
         pageNum: 1, // 页码
@@ -16,58 +17,58 @@ const store = new Vuex.Store({
         activeSid: null, // 当前的选集ID
         userId: null, // 用户/频道ID
         origin: null, // 域名
-        channelInfo: null,
+        channelInfo: {},
         lists: {
             setList: [], // 选集列表
             videoList: [] // 视频列表
         }
     },
     actions: {
-        GET_CHANNEL_INFO: function (context) {
+        // 获取频道信息
+        [types.GET_CHANNEL_INFO]: (context) => {
             return axios.get(`${context.state.origin}/bolo/api/public/userInfo.htm`, {
                 params: {
                     targetUserId: context.state.userId
                 }
-            }).then(function (res) {
+            }).then((res) => {
                 context.commit({
-                    type: 'SET_CHANNEL_INFO',
+                    type: types.SET_CHANNEL_INFO,
                     channelInfo: res.data
                 });
                 return res;
             });
         },
-        GET_SET_LIST: function (context) {
+        // 获取选集列表
+        [types.GET_SET_LIST]: (context) => {
             return axios.get(`${context.state.origin}/bolo/api/channel/setList.htm`, {
                 params: {
                     userId: context.state.userId
                 }
-            }).then(function (res) {
+            }).then((res) => {
                 if(res.data.length) {
                     context.commit({
-                        type: 'SET_SET_LIST',
+                        type: types.SET_SET_LIST,
                         setList: res.data
                     });
                     context.commit({
-                        type: 'SET_SID',
+                        type: types.SET_SID,
                         sid: res.data[0].sid
                     });
                     context.commit({
-                        type: 'SET_ACTIVE_SID',
+                        type: types.SET_ACTIVE_SID,
                         activeSid: res.data[0].sid
                     });
                 }
                 return res;
             });
         },
-        GET_VIDEO_lIST: function (context) {
+        // 获取视频列表
+        [types.GET_VIDEO_lIST]: (context) => {
             const state = context.state;
             const url = `${context.state.origin}/bolo/api/channel/${state.lists.setList.length ? 'setVideoList.htm' : 'videoList.htm'}`;
             context.commit({
-                type: 'SET_LOADING_STATE',
+                type: types.SET_LOADING_STATE,
                 loadingState: true
-            });
-            context.commit({
-                type: 'SET_PAGE_NUM',
             });
             return axios.get(url, {
                 params: {
@@ -76,62 +77,71 @@ const store = new Vuex.Store({
                     sid: state.sid,
                     userId: state.userId
                 }
-            }).then(function (res) {
+            }).then((res) => {
                 context.commit({
-                    type: 'SET_LOADING_STATE',
+                    type: types.SET_PAGE_NUM,
+                });
+                context.commit({
+                    type: types.SET_LOADING_STATE,
                     loadingState: false
                 });
                 if(res.data.length < state.pageSize) {
                     context.commit({
-                        type: 'SET_COMPLETE_STATE',
+                        type: types.SET_COMPLETE_STATE,
                         completeState: true
                     });
                 }
-                res.data.forEach(function (e) {
-                    state.videoList.push(e);
-                });
+                context.commit({
+                    type: types.SET_VIDEO_LIST,
+                    videoList: res.data
+                })
             });
         }
     },
 
     mutations: {
-        SET_CHANNEL_INFO: (state, payload) => {
-            Object.assign(state.channelInfo, payload.channelInfo);
+        [types.SET_CHANNEL_INFO]: (state, payload) => {
+            Object.keys(payload.channelInfo).forEach((e) => {
+                Vue.set(state.channelInfo, e, payload.channelInfo[e])
+            });
         },
-        SET_VIDEO_LIST: (state, payload) => {
-            state.lists.videoList = payload.vieoList;
+        [types.SET_VIDEO_LIST]: (state, payload) => {
+            if(payload.init) state.lists.videoList = [];
+            else state.lists.videoList = state.lists.videoList.concat(payload.videoList)
+
         },
-        SET_SET_LIST: (state, payload) => {
+        [types.SET_SET_LIST]: (state, payload) => {
             state.lists.setList = payload.setList;
         },
-        SET_PAGE_NUM: (state, payload) => {
-            if(payload && payload.pageNum)
+        [types.SET_PAGE_NUM]: (state, payload) => {
+            if(payload && payload.pageNum) {
                 state.pageNum = payload.pageNum;
+                console.log(state.pageNum);
+            }
             else
                 state.pageNum++;
         },
-        SET_SID: (state, payload) => {
+        [types.SET_SID]: (state, payload) => {
             state.sid = payload.sid;
         },
-        SET_ACTIVE_SID: (state, payload) => {
+        [types.SET_ACTIVE_SID]: (state, payload) => {
             state.activeSid = payload.activeSid;
         },
-        SET_LOADING_STATE: (state, payload) => {
+        [types.SET_LOADING_STATE]: (state, payload) => {
             state.loadingState = payload.loadingState;
         },
-        SET_SHOW_STATE: (state, payload) => {
+        [types.SET_SHOW_STATE]: (state, payload) => {
             state.showState = payload.showState;
         },
-        SET_COMPLETE_STATE: (state, payload) => {
+        [types.SET_COMPLETE_STATE]: (state, payload) => {
             state.completeState = payload.completeState;
         },
-        SET_USER_ID: (state, payload) => {
+        [types.SET_USER_ID]: (state, payload) => {
             state.userId = payload.userId;
         },
-        SET_ORIGIN: (state, payload) => {
+        [types.SET_ORIGIN]: (state, payload) => {
             state.origin = payload.origin;
-        },
-
+        }
     },
 
     getters: {

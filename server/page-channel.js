@@ -60,10 +60,9 @@ module.exports =
 	        type: _types2.default.SET_USER_ID,
 	        userId: context.params.userId
 	    });
-	    console.log('ok');
 	    return _main.store.dispatch(_types2.default.GET_CHANNEL_INFO).then(function () {
 	        context.state = _main.store.state;
-	        (0, _main.createApp)();
+	        return (0, _main.createApp)();
 	    });
 	};
 
@@ -102,33 +101,42 @@ module.exports =
 
 	var _store2 = _interopRequireDefault(_store);
 
+	var _types = __webpack_require__(43);
+
+	var _types2 = _interopRequireDefault(_types);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var createApp = function createApp(options) {
+	    options = options || {};
 	    return new _vue2.default(_extends({
 	        store: _store2.default,
 	        computed: (0, _vuex.mapState)(['pageNum', 'pageSize', 'loadingState', 'showState', 'completeState', 'sid', 'activeSid', 'userId', 'channelInfo', 'lists']),
 	        methods: _extends({
 	            changeSet: function changeSet(sid) {
 	                _store2.default.commit({
-	                    type: 'SET_PAGE_NUM',
+	                    type: _types2.default.SET_PAGE_NUM,
 	                    pageNum: 1
 	                });
 	                _store2.default.commit({
-	                    type: 'SET_VIDEO_LIST',
+	                    type: _types2.default.SET_VIDEO_LIST,
 	                    videoList: []
 	                });
 	                _store2.default.commit({
-	                    type: 'SET_SID',
+	                    type: _types2.default.SET_SID,
 	                    sid: sid
 	                });
 	                _store2.default.commit({
-	                    type: 'SET_ACTIVE_SID',
+	                    type: _types2.default.SET_ACTIVE_SID,
 	                    activeSid: sid
 	                });
 	                _store2.default.commit({
-	                    type: 'SET_COMPLETE_STATE',
+	                    type: _types2.default.SET_COMPLETE_STATE,
 	                    completeState: []
+	                });
+	                _store2.default.commit({
+	                    type: _types2.default.SET_VIDEO_LIST,
+	                    init: true
 	                });
 	                this.getVideoList();
 	            },
@@ -148,13 +156,13 @@ module.exports =
 	            }
 
 	        }, (0, _vuex.mapActions)({
-	            getChannelInfo: 'GET_CHANNEL_INFO'
+	            getChannelInfo: _types2.default.GET_CHANNEL_INFO
 	        }), (0, _vuex.mapActions)({
-	            getSetList: 'GET_SET_LIST'
+	            getSetList: _types2.default.GET_SET_LIST
 	        }), (0, _vuex.mapActions)({
-	            getVideoList: 'GET_VIDEO_lIST'
+	            getVideoList: _types2.default.GET_VIDEO_lIST
 	        }))
-	    }, _index2.default, options || {}));
+	    }, _index2.default, options));
 	};
 
 	exports.Vue = _vue2.default;
@@ -165,818 +173,13 @@ module.exports =
 /* 2 */
 /***/ function(module, exports) {
 
-	module.exports = require("Vue");
+	module.exports = require("vue");
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	/**
-	 * vuex v2.1.2
-	 * (c) 2017 Evan You
-	 * @license MIT
-	 */
-	(function (global, factory) {
-		 true ? module.exports = factory() :
-		typeof define === 'function' && define.amd ? define(factory) :
-		(global.Vuex = factory());
-	}(this, (function () { 'use strict';
-
-	var devtoolHook =
-	  typeof window !== 'undefined' &&
-	  window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
-
-	function devtoolPlugin (store) {
-	  if (!devtoolHook) { return }
-
-	  store._devtoolHook = devtoolHook;
-
-	  devtoolHook.emit('vuex:init', store);
-
-	  devtoolHook.on('vuex:travel-to-state', function (targetState) {
-	    store.replaceState(targetState);
-	  });
-
-	  store.subscribe(function (mutation, state) {
-	    devtoolHook.emit('vuex:mutation', mutation, state);
-	  });
-	}
-
-	var applyMixin = function (Vue) {
-	  var version = Number(Vue.version.split('.')[0]);
-
-	  if (version >= 2) {
-	    var usesInit = Vue.config._lifecycleHooks.indexOf('init') > -1;
-	    Vue.mixin(usesInit ? { init: vuexInit } : { beforeCreate: vuexInit });
-	  } else {
-	    // override init and inject vuex init procedure
-	    // for 1.x backwards compatibility.
-	    var _init = Vue.prototype._init;
-	    Vue.prototype._init = function (options) {
-	      if ( options === void 0 ) options = {};
-
-	      options.init = options.init
-	        ? [vuexInit].concat(options.init)
-	        : vuexInit;
-	      _init.call(this, options);
-	    };
-	  }
-
-	  /**
-	   * Vuex init hook, injected into each instances init hooks list.
-	   */
-
-	  function vuexInit () {
-	    var options = this.$options;
-	    // store injection
-	    if (options.store) {
-	      this.$store = options.store;
-	    } else if (options.parent && options.parent.$store) {
-	      this.$store = options.parent.$store;
-	    }
-	  }
-	};
-
-	var mapState = normalizeNamespace(function (namespace, states) {
-	  var res = {};
-	  normalizeMap(states).forEach(function (ref) {
-	    var key = ref.key;
-	    var val = ref.val;
-
-	    res[key] = function mappedState () {
-	      var state = this.$store.state;
-	      var getters = this.$store.getters;
-	      if (namespace) {
-	        var module = getModuleByNamespace(this.$store, 'mapState', namespace);
-	        if (!module) {
-	          return
-	        }
-	        state = module.context.state;
-	        getters = module.context.getters;
-	      }
-	      return typeof val === 'function'
-	        ? val.call(this, state, getters)
-	        : state[val]
-	    };
-	  });
-	  return res
-	});
-
-	var mapMutations = normalizeNamespace(function (namespace, mutations) {
-	  var res = {};
-	  normalizeMap(mutations).forEach(function (ref) {
-	    var key = ref.key;
-	    var val = ref.val;
-
-	    val = namespace + val;
-	    res[key] = function mappedMutation () {
-	      var args = [], len = arguments.length;
-	      while ( len-- ) args[ len ] = arguments[ len ];
-
-	      if (namespace && !getModuleByNamespace(this.$store, 'mapMutations', namespace)) {
-	        return
-	      }
-	      return this.$store.commit.apply(this.$store, [val].concat(args))
-	    };
-	  });
-	  return res
-	});
-
-	var mapGetters = normalizeNamespace(function (namespace, getters) {
-	  var res = {};
-	  normalizeMap(getters).forEach(function (ref) {
-	    var key = ref.key;
-	    var val = ref.val;
-
-	    val = namespace + val;
-	    res[key] = function mappedGetter () {
-	      if (namespace && !getModuleByNamespace(this.$store, 'mapGetters', namespace)) {
-	        return
-	      }
-	      if (!(val in this.$store.getters)) {
-	        console.error(("[vuex] unknown getter: " + val));
-	        return
-	      }
-	      return this.$store.getters[val]
-	    };
-	  });
-	  return res
-	});
-
-	var mapActions = normalizeNamespace(function (namespace, actions) {
-	  var res = {};
-	  normalizeMap(actions).forEach(function (ref) {
-	    var key = ref.key;
-	    var val = ref.val;
-
-	    val = namespace + val;
-	    res[key] = function mappedAction () {
-	      var args = [], len = arguments.length;
-	      while ( len-- ) args[ len ] = arguments[ len ];
-
-	      if (namespace && !getModuleByNamespace(this.$store, 'mapActions', namespace)) {
-	        return
-	      }
-	      return this.$store.dispatch.apply(this.$store, [val].concat(args))
-	    };
-	  });
-	  return res
-	});
-
-	function normalizeMap (map) {
-	  return Array.isArray(map)
-	    ? map.map(function (key) { return ({ key: key, val: key }); })
-	    : Object.keys(map).map(function (key) { return ({ key: key, val: map[key] }); })
-	}
-
-	function normalizeNamespace (fn) {
-	  return function (namespace, map) {
-	    if (typeof namespace !== 'string') {
-	      map = namespace;
-	      namespace = '';
-	    } else if (namespace.charAt(namespace.length - 1) !== '/') {
-	      namespace += '/';
-	    }
-	    return fn(namespace, map)
-	  }
-	}
-
-	function getModuleByNamespace (store, helper, namespace) {
-	  var module = store._modulesNamespaceMap[namespace];
-	  if (!module) {
-	    console.error(("[vuex] module namespace not found in " + helper + "(): " + namespace));
-	  }
-	  return module
-	}
-
-	/**
-	 * Get the first item that pass the test
-	 * by second argument function
-	 *
-	 * @param {Array} list
-	 * @param {Function} f
-	 * @return {*}
-	 */
-	/**
-	 * Deep copy the given object considering circular structure.
-	 * This function caches all nested objects and its copies.
-	 * If it detects circular structure, use cached copy to avoid infinite loop.
-	 *
-	 * @param {*} obj
-	 * @param {Array<Object>} cache
-	 * @return {*}
-	 */
-
-
-	/**
-	 * forEach for object
-	 */
-	function forEachValue (obj, fn) {
-	  Object.keys(obj).forEach(function (key) { return fn(obj[key], key); });
-	}
-
-	function isObject (obj) {
-	  return obj !== null && typeof obj === 'object'
-	}
-
-	function isPromise (val) {
-	  return val && typeof val.then === 'function'
-	}
-
-	function assert (condition, msg) {
-	  if (!condition) { throw new Error(("[vuex] " + msg)) }
-	}
-
-	var Module = function Module (rawModule, runtime) {
-	  this.runtime = runtime;
-	  this._children = Object.create(null);
-	  this._rawModule = rawModule;
-	};
-
-	var prototypeAccessors$1 = { state: {},namespaced: {} };
-
-	prototypeAccessors$1.state.get = function () {
-	  return this._rawModule.state || {}
-	};
-
-	prototypeAccessors$1.namespaced.get = function () {
-	  return !!this._rawModule.namespaced
-	};
-
-	Module.prototype.addChild = function addChild (key, module) {
-	  this._children[key] = module;
-	};
-
-	Module.prototype.removeChild = function removeChild (key) {
-	  delete this._children[key];
-	};
-
-	Module.prototype.getChild = function getChild (key) {
-	  return this._children[key]
-	};
-
-	Module.prototype.update = function update (rawModule) {
-	  this._rawModule.namespaced = rawModule.namespaced;
-	  if (rawModule.actions) {
-	    this._rawModule.actions = rawModule.actions;
-	  }
-	  if (rawModule.mutations) {
-	    this._rawModule.mutations = rawModule.mutations;
-	  }
-	  if (rawModule.getters) {
-	    this._rawModule.getters = rawModule.getters;
-	  }
-	};
-
-	Module.prototype.forEachChild = function forEachChild (fn) {
-	  forEachValue(this._children, fn);
-	};
-
-	Module.prototype.forEachGetter = function forEachGetter (fn) {
-	  if (this._rawModule.getters) {
-	    forEachValue(this._rawModule.getters, fn);
-	  }
-	};
-
-	Module.prototype.forEachAction = function forEachAction (fn) {
-	  if (this._rawModule.actions) {
-	    forEachValue(this._rawModule.actions, fn);
-	  }
-	};
-
-	Module.prototype.forEachMutation = function forEachMutation (fn) {
-	  if (this._rawModule.mutations) {
-	    forEachValue(this._rawModule.mutations, fn);
-	  }
-	};
-
-	Object.defineProperties( Module.prototype, prototypeAccessors$1 );
-
-	var ModuleCollection = function ModuleCollection (rawRootModule) {
-	  var this$1 = this;
-
-	  // register root module (Vuex.Store options)
-	  this.root = new Module(rawRootModule, false);
-
-	  // register all nested modules
-	  if (rawRootModule.modules) {
-	    forEachValue(rawRootModule.modules, function (rawModule, key) {
-	      this$1.register([key], rawModule, false);
-	    });
-	  }
-	};
-
-	ModuleCollection.prototype.get = function get (path) {
-	  return path.reduce(function (module, key) {
-	    return module.getChild(key)
-	  }, this.root)
-	};
-
-	ModuleCollection.prototype.getNamespace = function getNamespace (path) {
-	  var module = this.root;
-	  return path.reduce(function (namespace, key) {
-	    module = module.getChild(key);
-	    return namespace + (module.namespaced ? key + '/' : '')
-	  }, '')
-	};
-
-	ModuleCollection.prototype.update = function update$1 (rawRootModule) {
-	  update(this.root, rawRootModule);
-	};
-
-	ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
-	    var this$1 = this;
-	    if ( runtime === void 0 ) runtime = true;
-
-	  var parent = this.get(path.slice(0, -1));
-	  var newModule = new Module(rawModule, runtime);
-	  parent.addChild(path[path.length - 1], newModule);
-
-	  // register nested modules
-	  if (rawModule.modules) {
-	    forEachValue(rawModule.modules, function (rawChildModule, key) {
-	      this$1.register(path.concat(key), rawChildModule, runtime);
-	    });
-	  }
-	};
-
-	ModuleCollection.prototype.unregister = function unregister (path) {
-	  var parent = this.get(path.slice(0, -1));
-	  var key = path[path.length - 1];
-	  if (!parent.getChild(key).runtime) { return }
-
-	  parent.removeChild(key);
-	};
-
-	function update (targetModule, newModule) {
-	  // update target module
-	  targetModule.update(newModule);
-
-	  // update nested modules
-	  if (newModule.modules) {
-	    for (var key in newModule.modules) {
-	      if (!targetModule.getChild(key)) {
-	        console.warn(
-	          "[vuex] trying to add a new module '" + key + "' on hot reloading, " +
-	          'manual reload is needed'
-	        );
-	        return
-	      }
-	      update(targetModule.getChild(key), newModule.modules[key]);
-	    }
-	  }
-	}
-
-	var Vue; // bind on install
-
-	var Store = function Store (options) {
-	  var this$1 = this;
-	  if ( options === void 0 ) options = {};
-
-	  assert(Vue, "must call Vue.use(Vuex) before creating a store instance.");
-	  assert(typeof Promise !== 'undefined', "vuex requires a Promise polyfill in this browser.");
-
-	  var state = options.state; if ( state === void 0 ) state = {};
-	  var plugins = options.plugins; if ( plugins === void 0 ) plugins = [];
-	  var strict = options.strict; if ( strict === void 0 ) strict = false;
-
-	  // store internal state
-	  this._committing = false;
-	  this._actions = Object.create(null);
-	  this._mutations = Object.create(null);
-	  this._wrappedGetters = Object.create(null);
-	  this._modules = new ModuleCollection(options);
-	  this._modulesNamespaceMap = Object.create(null);
-	  this._subscribers = [];
-	  this._watcherVM = new Vue();
-
-	  // bind commit and dispatch to self
-	  var store = this;
-	  var ref = this;
-	  var dispatch = ref.dispatch;
-	  var commit = ref.commit;
-	  this.dispatch = function boundDispatch (type, payload) {
-	    return dispatch.call(store, type, payload)
-	  };
-	  this.commit = function boundCommit (type, payload, options) {
-	    return commit.call(store, type, payload, options)
-	  };
-
-	  // strict mode
-	  this.strict = strict;
-
-	  // init root module.
-	  // this also recursively registers all sub-modules
-	  // and collects all module getters inside this._wrappedGetters
-	  installModule(this, state, [], this._modules.root);
-
-	  // initialize the store vm, which is responsible for the reactivity
-	  // (also registers _wrappedGetters as computed properties)
-	  resetStoreVM(this, state);
-
-	  // apply plugins
-	  plugins.concat(devtoolPlugin).forEach(function (plugin) { return plugin(this$1); });
-	};
-
-	var prototypeAccessors = { state: {} };
-
-	prototypeAccessors.state.get = function () {
-	  return this._vm.$data.state
-	};
-
-	prototypeAccessors.state.set = function (v) {
-	  assert(false, "Use store.replaceState() to explicit replace store state.");
-	};
-
-	Store.prototype.commit = function commit (_type, _payload, _options) {
-	    var this$1 = this;
-
-	  // check object-style commit
-	  var ref = unifyObjectStyle(_type, _payload, _options);
-	    var type = ref.type;
-	    var payload = ref.payload;
-	    var options = ref.options;
-
-	  var mutation = { type: type, payload: payload };
-	  var entry = this._mutations[type];
-	  if (!entry) {
-	    console.error(("[vuex] unknown mutation type: " + type));
-	    return
-	  }
-	  this._withCommit(function () {
-	    entry.forEach(function commitIterator (handler) {
-	      handler(payload);
-	    });
-	  });
-	  this._subscribers.forEach(function (sub) { return sub(mutation, this$1.state); });
-
-	  if (options && options.silent) {
-	    console.warn(
-	      "[vuex] mutation type: " + type + ". Silent option has been removed. " +
-	      'Use the filter functionality in the vue-devtools'
-	    );
-	  }
-	};
-
-	Store.prototype.dispatch = function dispatch (_type, _payload) {
-	  // check object-style dispatch
-	  var ref = unifyObjectStyle(_type, _payload);
-	    var type = ref.type;
-	    var payload = ref.payload;
-
-	  var entry = this._actions[type];
-	  if (!entry) {
-	    console.error(("[vuex] unknown action type: " + type));
-	    return
-	  }
-	  return entry.length > 1
-	    ? Promise.all(entry.map(function (handler) { return handler(payload); }))
-	    : entry[0](payload)
-	};
-
-	Store.prototype.subscribe = function subscribe (fn) {
-	  var subs = this._subscribers;
-	  if (subs.indexOf(fn) < 0) {
-	    subs.push(fn);
-	  }
-	  return function () {
-	    var i = subs.indexOf(fn);
-	    if (i > -1) {
-	      subs.splice(i, 1);
-	    }
-	  }
-	};
-
-	Store.prototype.watch = function watch (getter, cb, options) {
-	    var this$1 = this;
-
-	  assert(typeof getter === 'function', "store.watch only accepts a function.");
-	  return this._watcherVM.$watch(function () { return getter(this$1.state, this$1.getters); }, cb, options)
-	};
-
-	Store.prototype.replaceState = function replaceState (state) {
-	    var this$1 = this;
-
-	  this._withCommit(function () {
-	    this$1._vm.state = state;
-	  });
-	};
-
-	Store.prototype.registerModule = function registerModule (path, rawModule) {
-	  if (typeof path === 'string') { path = [path]; }
-	  assert(Array.isArray(path), "module path must be a string or an Array.");
-	  this._modules.register(path, rawModule);
-	  installModule(this, this.state, path, this._modules.get(path));
-	  // reset store to update getters...
-	  resetStoreVM(this, this.state);
-	};
-
-	Store.prototype.unregisterModule = function unregisterModule (path) {
-	    var this$1 = this;
-
-	  if (typeof path === 'string') { path = [path]; }
-	  assert(Array.isArray(path), "module path must be a string or an Array.");
-	  this._modules.unregister(path);
-	  this._withCommit(function () {
-	    var parentState = getNestedState(this$1.state, path.slice(0, -1));
-	    Vue.delete(parentState, path[path.length - 1]);
-	  });
-	  resetStore(this);
-	};
-
-	Store.prototype.hotUpdate = function hotUpdate (newOptions) {
-	  this._modules.update(newOptions);
-	  resetStore(this, true);
-	};
-
-	Store.prototype._withCommit = function _withCommit (fn) {
-	  var committing = this._committing;
-	  this._committing = true;
-	  fn();
-	  this._committing = committing;
-	};
-
-	Object.defineProperties( Store.prototype, prototypeAccessors );
-
-	function resetStore (store, hot) {
-	  store._actions = Object.create(null);
-	  store._mutations = Object.create(null);
-	  store._wrappedGetters = Object.create(null);
-	  store._modulesNamespaceMap = Object.create(null);
-	  var state = store.state;
-	  // init all modules
-	  installModule(store, state, [], store._modules.root, true);
-	  // reset vm
-	  resetStoreVM(store, state, hot);
-	}
-
-	function resetStoreVM (store, state, hot) {
-	  var oldVm = store._vm;
-
-	  // bind store public getters
-	  store.getters = {};
-	  var wrappedGetters = store._wrappedGetters;
-	  var computed = {};
-	  forEachValue(wrappedGetters, function (fn, key) {
-	    // use computed to leverage its lazy-caching mechanism
-	    computed[key] = function () { return fn(store); };
-	    Object.defineProperty(store.getters, key, {
-	      get: function () { return store._vm[key]; },
-	      enumerable: true // for local getters
-	    });
-	  });
-
-	  // use a Vue instance to store the state tree
-	  // suppress warnings just in case the user has added
-	  // some funky global mixins
-	  var silent = Vue.config.silent;
-	  Vue.config.silent = true;
-	  store._vm = new Vue({
-	    data: { state: state },
-	    computed: computed
-	  });
-	  Vue.config.silent = silent;
-
-	  // enable strict mode for new vm
-	  if (store.strict) {
-	    enableStrictMode(store);
-	  }
-
-	  if (oldVm) {
-	    if (hot) {
-	      // dispatch changes in all subscribed watchers
-	      // to force getter re-evaluation for hot reloading.
-	      store._withCommit(function () {
-	        oldVm.state = null;
-	      });
-	    }
-	    Vue.nextTick(function () { return oldVm.$destroy(); });
-	  }
-	}
-
-	function installModule (store, rootState, path, module, hot) {
-	  var isRoot = !path.length;
-	  var namespace = store._modules.getNamespace(path);
-
-	  // register in namespace map
-	  if (namespace) {
-	    store._modulesNamespaceMap[namespace] = module;
-	  }
-
-	  // set state
-	  if (!isRoot && !hot) {
-	    var parentState = getNestedState(rootState, path.slice(0, -1));
-	    var moduleName = path[path.length - 1];
-	    store._withCommit(function () {
-	      Vue.set(parentState, moduleName, module.state);
-	    });
-	  }
-
-	  var local = module.context = makeLocalContext(store, namespace, path);
-
-	  module.forEachMutation(function (mutation, key) {
-	    var namespacedType = namespace + key;
-	    registerMutation(store, namespacedType, mutation, local);
-	  });
-
-	  module.forEachAction(function (action, key) {
-	    var namespacedType = namespace + key;
-	    registerAction(store, namespacedType, action, local);
-	  });
-
-	  module.forEachGetter(function (getter, key) {
-	    var namespacedType = namespace + key;
-	    registerGetter(store, namespacedType, getter, local);
-	  });
-
-	  module.forEachChild(function (child, key) {
-	    installModule(store, rootState, path.concat(key), child, hot);
-	  });
-	}
-
-	/**
-	 * make localized dispatch, commit, getters and state
-	 * if there is no namespace, just use root ones
-	 */
-	function makeLocalContext (store, namespace, path) {
-	  var noNamespace = namespace === '';
-
-	  var local = {
-	    dispatch: noNamespace ? store.dispatch : function (_type, _payload, _options) {
-	      var args = unifyObjectStyle(_type, _payload, _options);
-	      var payload = args.payload;
-	      var options = args.options;
-	      var type = args.type;
-
-	      if (!options || !options.root) {
-	        type = namespace + type;
-	        if (!store._actions[type]) {
-	          console.error(("[vuex] unknown local action type: " + (args.type) + ", global type: " + type));
-	          return
-	        }
-	      }
-
-	      return store.dispatch(type, payload)
-	    },
-
-	    commit: noNamespace ? store.commit : function (_type, _payload, _options) {
-	      var args = unifyObjectStyle(_type, _payload, _options);
-	      var payload = args.payload;
-	      var options = args.options;
-	      var type = args.type;
-
-	      if (!options || !options.root) {
-	        type = namespace + type;
-	        if (!store._mutations[type]) {
-	          console.error(("[vuex] unknown local mutation type: " + (args.type) + ", global type: " + type));
-	          return
-	        }
-	      }
-
-	      store.commit(type, payload, options);
-	    }
-	  };
-
-	  // getters and state object must be gotten lazily
-	  // because they will be changed by vm update
-	  Object.defineProperties(local, {
-	    getters: {
-	      get: noNamespace
-	        ? function () { return store.getters; }
-	        : function () { return makeLocalGetters(store, namespace); }
-	    },
-	    state: {
-	      get: function () { return getNestedState(store.state, path); }
-	    }
-	  });
-
-	  return local
-	}
-
-	function makeLocalGetters (store, namespace) {
-	  var gettersProxy = {};
-
-	  var splitPos = namespace.length;
-	  Object.keys(store.getters).forEach(function (type) {
-	    // skip if the target getter is not match this namespace
-	    if (type.slice(0, splitPos) !== namespace) { return }
-
-	    // extract local getter type
-	    var localType = type.slice(splitPos);
-
-	    // Add a port to the getters proxy.
-	    // Define as getter property because
-	    // we do not want to evaluate the getters in this time.
-	    Object.defineProperty(gettersProxy, localType, {
-	      get: function () { return store.getters[type]; },
-	      enumerable: true
-	    });
-	  });
-
-	  return gettersProxy
-	}
-
-	function registerMutation (store, type, handler, local) {
-	  var entry = store._mutations[type] || (store._mutations[type] = []);
-	  entry.push(function wrappedMutationHandler (payload) {
-	    handler(local.state, payload);
-	  });
-	}
-
-	function registerAction (store, type, handler, local) {
-	  var entry = store._actions[type] || (store._actions[type] = []);
-	  entry.push(function wrappedActionHandler (payload, cb) {
-	    var res = handler({
-	      dispatch: local.dispatch,
-	      commit: local.commit,
-	      getters: local.getters,
-	      state: local.state,
-	      rootGetters: store.getters,
-	      rootState: store.state
-	    }, payload, cb);
-	    if (!isPromise(res)) {
-	      res = Promise.resolve(res);
-	    }
-	    if (store._devtoolHook) {
-	      return res.catch(function (err) {
-	        store._devtoolHook.emit('vuex:error', err);
-	        throw err
-	      })
-	    } else {
-	      return res
-	    }
-	  });
-	}
-
-	function registerGetter (store, type, rawGetter, local) {
-	  if (store._wrappedGetters[type]) {
-	    console.error(("[vuex] duplicate getter key: " + type));
-	    return
-	  }
-	  store._wrappedGetters[type] = function wrappedGetter (store) {
-	    return rawGetter(
-	      local.state, // local state
-	      local.getters, // local getters
-	      store.state, // root state
-	      store.getters // root getters
-	    )
-	  };
-	}
-
-	function enableStrictMode (store) {
-	  store._vm.$watch('state', function () {
-	    assert(store._committing, "Do not mutate vuex store state outside mutation handlers.");
-	  }, { deep: true, sync: true });
-	}
-
-	function getNestedState (state, path) {
-	  return path.length
-	    ? path.reduce(function (state, key) { return state[key]; }, state)
-	    : state
-	}
-
-	function unifyObjectStyle (type, payload, options) {
-	  if (isObject(type) && type.type) {
-	    options = payload;
-	    payload = type;
-	    type = type.type;
-	  }
-
-	  assert(typeof type === 'string', ("Expects string as the type, but found " + (typeof type) + "."));
-
-	  return { type: type, payload: payload, options: options }
-	}
-
-	function install (_Vue) {
-	  if (Vue) {
-	    console.error(
-	      '[vuex] already installed. Vue.use(Vuex) should be called only once.'
-	    );
-	    return
-	  }
-	  Vue = _Vue;
-	  applyMixin(Vue);
-	}
-
-	// auto install in dist mode
-	if (typeof window !== 'undefined' && window.Vue) {
-	  install(window.Vue);
-	}
-
-	var index = {
-	  Store: Store,
-	  install: install,
-	  version: '2.1.2',
-	  mapState: mapState,
-	  mapMutations: mapMutations,
-	  mapGetters: mapGetters,
-	  mapActions: mapActions
-	};
-
-	return index;
-
-	})));
-
+	module.exports = require("vuex");
 
 /***/ },
 /* 4 */
@@ -2141,6 +1344,8 @@ module.exports =
 	    value: true
 	});
 
+	var _actions, _mutations;
+
 	var _vue = __webpack_require__(2);
 
 	var _vue2 = _interopRequireDefault(_vue);
@@ -2149,16 +1354,20 @@ module.exports =
 
 	var _vuex2 = _interopRequireDefault(_vuex);
 
-	var _fetchPolyfill = __webpack_require__(42);
+	var _axios = __webpack_require__(42);
 
-	var _fetchPolyfill2 = _interopRequireDefault(_fetchPolyfill);
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _types = __webpack_require__(43);
+
+	var _types2 = _interopRequireDefault(_types);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	_vue2.default.use(_vuex2.default);
-	// import axios from 'axios'
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-
+	if (true) _vue2.default.use(_vuex2.default);
+	console.log((false));
 	var store = new _vuex2.default.Store({
 	    state: {
 	        pageNum: 1, // 页码
@@ -2170,120 +1379,109 @@ module.exports =
 	        activeSid: null, // 当前的选集ID
 	        userId: null, // 用户/频道ID
 	        origin: null, // 域名
-	        channelInfo: null,
+	        channelInfo: {},
 	        lists: {
 	            setList: [], // 选集列表
 	            videoList: [] // 视频列表
 	        }
 	    },
-	    actions: {
-	        GET_CHANNEL_INFO: function GET_CHANNEL_INFO(context) {
-	            return axios.get(context.state.origin + '/bolo/api/public/userInfo.htm', {
-	                params: {
-	                    targetUserId: context.state.userId
-	                }
-	            }).then(function (res) {
-	                context.commit({
-	                    type: 'SET_CHANNEL_INFO',
-	                    channelInfo: res.data
-	                });
-	                return res;
-	            });
-	        },
-	        GET_SET_LIST: function GET_SET_LIST(context) {
-	            return axios.get(context.state.origin + '/bolo/api/channel/setList.htm', {
-	                params: {
-	                    userId: context.state.userId
-	                }
-	            }).then(function (res) {
-	                if (res.data.length) {
-	                    context.commit({
-	                        type: 'SET_SET_LIST',
-	                        setList: res.data
-	                    });
-	                    context.commit({
-	                        type: 'SET_SID',
-	                        sid: res.data[0].sid
-	                    });
-	                    context.commit({
-	                        type: 'SET_ACTIVE_SID',
-	                        activeSid: res.data[0].sid
-	                    });
-	                }
-	                return res;
-	            });
-	        },
-	        GET_VIDEO_lIST: function GET_VIDEO_lIST(context) {
-	            var state = context.state;
-	            var url = context.state.origin + '/bolo/api/channel/' + (state.lists.setList.length ? 'setVideoList.htm' : 'videoList.htm');
+	    actions: (_actions = {}, _defineProperty(_actions, _types2.default.GET_CHANNEL_INFO, function (context) {
+	        return _axios2.default.get(context.state.origin + '/bolo/api/public/userInfo.htm', {
+	            params: {
+	                targetUserId: context.state.userId
+	            }
+	        }).then(function (res) {
 	            context.commit({
-	                type: 'SET_LOADING_STATE',
-	                loadingState: true
+	                type: _types2.default.SET_CHANNEL_INFO,
+	                channelInfo: res.data
+	            });
+	            return res;
+	        });
+	    }), _defineProperty(_actions, _types2.default.GET_SET_LIST, function (context) {
+	        return _axios2.default.get(context.state.origin + '/bolo/api/channel/setList.htm', {
+	            params: {
+	                userId: context.state.userId
+	            }
+	        }).then(function (res) {
+	            if (res.data.length) {
+	                context.commit({
+	                    type: _types2.default.SET_SET_LIST,
+	                    setList: res.data
+	                });
+	                context.commit({
+	                    type: _types2.default.SET_SID,
+	                    sid: res.data[0].sid
+	                });
+	                context.commit({
+	                    type: _types2.default.SET_ACTIVE_SID,
+	                    activeSid: res.data[0].sid
+	                });
+	            }
+	            return res;
+	        });
+	    }), _defineProperty(_actions, _types2.default.GET_VIDEO_lIST, function (context) {
+	        var state = context.state;
+	        var url = context.state.origin + '/bolo/api/channel/' + (state.lists.setList.length ? 'setVideoList.htm' : 'videoList.htm');
+	        context.commit({
+	            type: _types2.default.SET_LOADING_STATE,
+	            loadingState: true
+	        });
+	        return _axios2.default.get(url, {
+	            params: {
+	                pageNum: state.pageNum,
+	                pageSize: state.pageSize,
+	                sid: state.sid,
+	                userId: state.userId
+	            }
+	        }).then(function (res) {
+	            context.commit({
+	                type: _types2.default.SET_PAGE_NUM
 	            });
 	            context.commit({
-	                type: 'SET_PAGE_NUM'
+	                type: _types2.default.SET_LOADING_STATE,
+	                loadingState: false
 	            });
-	            return axios.get(url, {
-	                params: {
-	                    pageNum: state.pageNum,
-	                    pageSize: state.pageSize,
-	                    sid: state.sid,
-	                    userId: state.userId
-	                }
-	            }).then(function (res) {
+	            if (res.data.length < state.pageSize) {
 	                context.commit({
-	                    type: 'SET_LOADING_STATE',
-	                    loadingState: false
+	                    type: _types2.default.SET_COMPLETE_STATE,
+	                    completeState: true
 	                });
-	                if (res.data.length < state.pageSize) {
-	                    context.commit({
-	                        type: 'SET_COMPLETE_STATE',
-	                        completeState: true
-	                    });
-	                }
-	                res.data.forEach(function (e) {
-	                    state.videoList.push(e);
-	                });
+	            }
+	            context.commit({
+	                type: _types2.default.SET_VIDEO_LIST,
+	                videoList: res.data
 	            });
-	        }
-	    },
+	        });
+	    }), _actions),
 
-	    mutations: {
-	        SET_CHANNEL_INFO: function SET_CHANNEL_INFO(state, payload) {
-	            Object.assign(state.channelInfo, payload.channelInfo);
-	        },
-	        SET_VIDEO_LIST: function SET_VIDEO_LIST(state, payload) {
-	            state.lists.videoList = payload.vieoList;
-	        },
-	        SET_SET_LIST: function SET_SET_LIST(state, payload) {
-	            state.lists.setList = payload.setList;
-	        },
-	        SET_PAGE_NUM: function SET_PAGE_NUM(state, payload) {
-	            if (payload && payload.pageNum) state.pageNum = payload.pageNum;else state.pageNum++;
-	        },
-	        SET_SID: function SET_SID(state, payload) {
-	            state.sid = payload.sid;
-	        },
-	        SET_ACTIVE_SID: function SET_ACTIVE_SID(state, payload) {
-	            state.activeSid = payload.activeSid;
-	        },
-	        SET_LOADING_STATE: function SET_LOADING_STATE(state, payload) {
-	            state.loadingState = payload.loadingState;
-	        },
-	        SET_SHOW_STATE: function SET_SHOW_STATE(state, payload) {
-	            state.showState = payload.showState;
-	        },
-	        SET_COMPLETE_STATE: function SET_COMPLETE_STATE(state, payload) {
-	            state.completeState = payload.completeState;
-	        },
-	        SET_USER_ID: function SET_USER_ID(state, payload) {
-	            state.userId = payload.userId;
-	        },
-	        SET_ORIGIN: function SET_ORIGIN(state, payload) {
-	            state.origin = payload.origin;
-	        }
-
-	    },
+	    mutations: (_mutations = {}, _defineProperty(_mutations, _types2.default.SET_CHANNEL_INFO, function (state, payload) {
+	        Object.keys(payload.channelInfo).forEach(function (e) {
+	            _vue2.default.set(state.channelInfo, e, payload.channelInfo[e]);
+	        });
+	    }), _defineProperty(_mutations, _types2.default.SET_VIDEO_LIST, function (state, payload) {
+	        if (payload.init) state.lists.videoList = [];else state.lists.videoList = state.lists.videoList.concat(payload.videoList);
+	    }), _defineProperty(_mutations, _types2.default.SET_SET_LIST, function (state, payload) {
+	        state.lists.setList = payload.setList;
+	    }), _defineProperty(_mutations, _types2.default.SET_PAGE_NUM, function (state, payload) {
+	        if (payload && payload.pageNum) {
+	            state.pageNum = payload.pageNum;
+	            console.log(state.pageNum);
+	        } else state.pageNum++;
+	    }), _defineProperty(_mutations, _types2.default.SET_SID, function (state, payload) {
+	        state.sid = payload.sid;
+	    }), _defineProperty(_mutations, _types2.default.SET_ACTIVE_SID, function (state, payload) {
+	        state.activeSid = payload.activeSid;
+	    }), _defineProperty(_mutations, _types2.default.SET_LOADING_STATE, function (state, payload) {
+	        state.loadingState = payload.loadingState;
+	    }), _defineProperty(_mutations, _types2.default.SET_SHOW_STATE, function (state, payload) {
+	        state.showState = payload.showState;
+	    }), _defineProperty(_mutations, _types2.default.SET_COMPLETE_STATE, function (state, payload) {
+	        state.completeState = payload.completeState;
+	    }), _defineProperty(_mutations, _types2.default.SET_USER_ID, function (state, payload) {
+	        state.userId = payload.userId;
+	    }), _defineProperty(_mutations, _types2.default.SET_ORIGIN, function (state, payload) {
+	        state.origin = payload.origin;
+	    }), _mutations),
 
 	    getters: {}
 	});
@@ -2294,364 +1492,7 @@ module.exports =
 /* 42 */
 /***/ function(module, exports) {
 
-	(function() {
-	  'use strict';
-
-	  if (self.fetch) {
-	    return
-	  }
-
-	  function normalizeName(name) {
-	    if (typeof name !== 'string') {
-	      name = name.toString();
-	    }
-	    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
-	      throw new TypeError('Invalid character in header field name')
-	    }
-	    return name.toLowerCase()
-	  }
-
-	  function normalizeValue(value) {
-	    if (typeof value !== 'string') {
-	      value = value.toString();
-	    }
-	    return value
-	  }
-
-	  function Headers(headers) {
-	    this.map = {}
-
-	    var self = this
-	    if (headers instanceof Headers) {
-	      headers.forEach(function(name, values) {
-	        values.forEach(function(value) {
-	          self.append(name, value)
-	        })
-	      })
-
-	    } else if (headers) {
-	      Object.getOwnPropertyNames(headers).forEach(function(name) {
-	        self.append(name, headers[name])
-	      })
-	    }
-	  }
-
-	  Headers.prototype.append = function(name, value) {
-	    name = normalizeName(name)
-	    value = normalizeValue(value)
-	    var list = this.map[name]
-	    if (!list) {
-	      list = []
-	      this.map[name] = list
-	    }
-	    list.push(value)
-	  }
-
-	  Headers.prototype['delete'] = function(name) {
-	    delete this.map[normalizeName(name)]
-	  }
-
-	  Headers.prototype.get = function(name) {
-	    var values = this.map[normalizeName(name)]
-	    return values ? values[0] : null
-	  }
-
-	  Headers.prototype.getAll = function(name) {
-	    return this.map[normalizeName(name)] || []
-	  }
-
-	  Headers.prototype.has = function(name) {
-	    return this.map.hasOwnProperty(normalizeName(name))
-	  }
-
-	  Headers.prototype.set = function(name, value) {
-	    this.map[normalizeName(name)] = [normalizeValue(value)]
-	  }
-
-	  // Instead of iterable for now.
-	  Headers.prototype.forEach = function(callback) {
-	    var self = this
-	    Object.getOwnPropertyNames(this.map).forEach(function(name) {
-	      callback(name, self.map[name])
-	    })
-	  }
-
-	  function consumed(body) {
-	    if (body.bodyUsed) {
-	      return fetch.Promise.reject(new TypeError('Already read'))
-	    }
-	    body.bodyUsed = true
-	  }
-
-	  function fileReaderReady(reader) {
-	    return new fetch.Promise(function(resolve, reject) {
-	      reader.onload = function() {
-	        resolve(reader.result)
-	      }
-	      reader.onerror = function() {
-	        reject(reader.error)
-	      }
-	    })
-	  }
-
-	  function readBlobAsArrayBuffer(blob) {
-	    var reader = new FileReader()
-	    reader.readAsArrayBuffer(blob)
-	    return fileReaderReady(reader)
-	  }
-
-	  function readBlobAsText(blob) {
-	    var reader = new FileReader()
-	    reader.readAsText(blob)
-	    return fileReaderReady(reader)
-	  }
-
-	  var support = {
-	    blob: 'FileReader' in self && 'Blob' in self && (function() {
-	      try {
-	        new Blob();
-	        return true
-	      } catch(e) {
-	        return false
-	      }
-	    })(),
-	    formData: 'FormData' in self
-	  }
-
-	  function Body() {
-	    this.bodyUsed = false
-
-
-	    this._initBody = function(body) {
-	      this._bodyInit = body
-	      if (typeof body === 'string') {
-	        this._bodyText = body
-	      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
-	        this._bodyBlob = body
-	      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
-	        this._bodyFormData = body
-	      } else if (!body) {
-	        this._bodyText = ''
-	      } else {
-	        throw new Error('unsupported BodyInit type')
-	      }
-	    }
-
-	    if (support.blob) {
-	      this.blob = function() {
-	        var rejected = consumed(this)
-	        if (rejected) {
-	          return rejected
-	        }
-
-	        if (this._bodyBlob) {
-	          return fetch.Promise.resolve(this._bodyBlob)
-	        } else if (this._bodyFormData) {
-	          throw new Error('could not read FormData body as blob')
-	        } else {
-	          return fetch.Promise.resolve(new Blob([this._bodyText]))
-	        }
-	      }
-
-	      this.arrayBuffer = function() {
-	        return this.blob().then(readBlobAsArrayBuffer)
-	      }
-
-	      this.text = function() {
-	        var rejected = consumed(this)
-	        if (rejected) {
-	          return rejected
-	        }
-
-	        if (this._bodyBlob) {
-	          return readBlobAsText(this._bodyBlob)
-	        } else if (this._bodyFormData) {
-	          throw new Error('could not read FormData body as text')
-	        } else {
-	          return fetch.Promise.resolve(this._bodyText)
-	        }
-	      }
-	    } else {
-	      this.text = function() {
-	        var rejected = consumed(this)
-	        return rejected ? rejected : fetch.Promise.resolve(this._bodyText)
-	      }
-	    }
-
-	    if (support.formData) {
-	      this.formData = function() {
-	        return this.text().then(decode)
-	      }
-	    }
-
-	    this.json = function() {
-	      return this.text().then(function (text) {
-	          return JSON.parse(text);
-	      });
-	    }
-
-	    return this
-	  }
-
-	  // HTTP methods whose capitalization should be normalized
-	  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
-
-	  function normalizeMethod(method) {
-	    var upcased = method.toUpperCase()
-	    return (methods.indexOf(upcased) > -1) ? upcased : method
-	  }
-
-	  function Request(url, options) {
-	    options = options || {}
-	    this.url = url
-
-	    this.credentials = options.credentials || 'omit'
-	    this.headers = new Headers(options.headers)
-	    this.method = normalizeMethod(options.method || 'GET')
-	    this.mode = options.mode || null
-	    this.referrer = null
-
-	    if ((this.method === 'GET' || this.method === 'HEAD') && options.body) {
-	      throw new TypeError('Body not allowed for GET or HEAD requests')
-	    }
-	    this._initBody(options.body)
-	  }
-
-	  function decode(body) {
-	    var form = new FormData()
-	    body.trim().split('&').forEach(function(bytes) {
-	      if (bytes) {
-	        var split = bytes.split('=')
-	        var name = split.shift().replace(/\+/g, ' ')
-	        var value = split.join('=').replace(/\+/g, ' ')
-	        form.append(decodeURIComponent(name), decodeURIComponent(value))
-	      }
-	    })
-	    return form
-	  }
-
-	  function headers(xhr) {
-	    var head = new Headers()
-	    var pairs = xhr.getAllResponseHeaders().trim().split('\n')
-	    pairs.forEach(function(header) {
-	      var split = header.trim().split(':')
-	      var key = split.shift().trim()
-	      var value = split.join(':').trim()
-	      head.append(key, value)
-	    })
-	    return head
-	  }
-
-	  var noXhrPatch =
-	    typeof window !== 'undefined' && !!window.ActiveXObject &&
-	      !(window.XMLHttpRequest && (new XMLHttpRequest).dispatchEvent);
-
-	  function getXhr() {
-	    // from backbone.js 1.1.2
-	    // https://github.com/jashkenas/backbone/blob/1.1.2/backbone.js#L1181
-	    if (noXhrPatch && !(/^(get|post|head|put|delete|options)$/i.test(this.method))) {
-	      this.usingActiveXhr = true;
-	      return new ActiveXObject("Microsoft.XMLHTTP");
-	    }
-	    return new XMLHttpRequest();
-	  }
-
-	  Body.call(Request.prototype)
-
-	  function Response(bodyInit, options) {
-	    if (!options) {
-	      options = {}
-	    }
-
-	    this._initBody(bodyInit)
-	    this.type = 'default'
-	    this.url = null
-	    this.status = options.status
-	    this.ok = this.status >= 200 && this.status < 300
-	    this.statusText = options.statusText
-	    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
-	    this.url = options.url || ''
-	  }
-
-	  Body.call(Response.prototype)
-
-	  self.Headers = Headers;
-	  self.Request = Request;
-	  self.Response = Response;
-
-	  self.fetch = function(input, init) {
-	    // TODO: Request constructor should accept input, init
-	    var request
-	    if (Request.prototype.isPrototypeOf(input) && !init) {
-	      request = input
-	    } else {
-	      request = new Request(input, init)
-	    }
-
-	    return new fetch.Promise(function(resolve, reject) {
-	      var xhr = getXhr();
-	      if (request.credentials === 'cors') {
-	        xhr.withCredentials = true;
-	      }
-
-	      function responseURL() {
-	        if ('responseURL' in xhr) {
-	          return xhr.responseURL
-	        }
-
-	        // Avoid security warnings on getResponseHeader when not allowed by CORS
-	        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
-	          return xhr.getResponseHeader('X-Request-URL')
-	        }
-
-	        return;
-	      }
-
-	      function onload() {
-	        if (xhr.readyState !== 4) {
-	          return
-	        }
-	        var status = (xhr.status === 1223) ? 204 : xhr.status
-	        if (status < 100 || status > 599) {
-	          reject(new TypeError('Network request failed'))
-	          return
-	        }
-	        var options = {
-	          status: status,
-	          statusText: xhr.statusText,
-	          headers: headers(xhr),
-	          url: responseURL()
-	        }
-	        var body = 'response' in xhr ? xhr.response : xhr.responseText;
-	        resolve(new Response(body, options))
-	      }
-	      xhr.onreadystatechange = onload;
-	      if (!self.usingActiveXhr) {
-	        xhr.onload = onload;
-	        xhr.onerror = function() {
-	          reject(new TypeError('Network request failed'))
-	        }
-	      }
-
-	      xhr.open(request.method, request.url, true)
-
-	      if ('responseType' in xhr && support.blob) {
-	        xhr.responseType = 'blob'
-	      }
-
-	      request.headers.forEach(function(name, values) {
-	        values.forEach(function(value) {
-	          xhr.setRequestHeader(name, value)
-	        })
-	      })
-
-	      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
-	    })
-	  }
-	  fetch.Promise = self.Promise; // you could change it to your favorite alternative
-	  self.fetch.polyfill = true
-	})();
-
+	module.exports = require("axios");
 
 /***/ },
 /* 43 */

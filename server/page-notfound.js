@@ -65,7 +65,7 @@ module.exports =
 /***/ 2:
 /***/ function(module, exports) {
 
-	module.exports = require("Vue");
+	module.exports = require("vue");
 
 /***/ },
 

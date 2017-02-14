@@ -1,15 +1,21 @@
 import remHelper from '../../lib/remHelper'
 import {createApp, store} from './main';
+import types from './types'
 
+console.log(store.state);
 store.replaceState(window.__SERVER_STATE__);
+window.__SERVER_STATE__ = null;
 
 export default createApp({
     el: '#app',
     created: function () {
         const self = this;
-        self.canShow = true;
+        store.commit({
+            type: types.SET_SHOW_STATE,
+            showState: true
+        });
         self.getChannelInfo();
-        self.getSetList().then(function (res) {
+        self.getSetList().then((res) => {
             return self.getVideoList();
         });
         remHelper.init(1080);

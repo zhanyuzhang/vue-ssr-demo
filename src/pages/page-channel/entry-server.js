@@ -9,9 +9,8 @@ export default function (context) {
         type: types.SET_USER_ID,
         userId: context.params.userId
     });
-    console.log('ok');
-    return store.dispatch(types.GET_CHANNEL_INFO).then(function () {
+    return store.dispatch(types.GET_CHANNEL_INFO).then(() => {
         context.state = store.state;
-        createApp();
+        return createApp();
     });
 }

@@ -1,11 +1,13 @@
 import Vue from 'vue';
-import { mapMutations } from 'vuex'
+import { mapMutations2 } from 'vuex'
 import { mapActions } from 'vuex'
 import { mapState } from 'vuex'
-import App from './index.vue';
-import store from './store';
+import App from './index.vue'
+import store from './store'
+import types from './types'
 
 const createApp = function createApp(options) {
+    options = options || {};
     return new Vue({
         store,
         computed: mapState([
@@ -23,24 +25,28 @@ const createApp = function createApp(options) {
         methods: {
             changeSet: function (sid) {
                 store.commit({
-                    type: 'SET_PAGE_NUM',
+                    type: types.SET_PAGE_NUM,
                     pageNum: 1
                 });
                 store.commit({
-                    type: 'SET_VIDEO_LIST',
+                    type: types.SET_VIDEO_LIST,
                     videoList: []
                 });
                 store.commit({
-                    type: 'SET_SID',
+                    type: types.SET_SID,
                     sid: sid
                 });
                 store.commit({
-                    type: 'SET_ACTIVE_SID',
+                    type: types.SET_ACTIVE_SID,
                     activeSid: sid
                 });
                 store.commit({
-                    type: 'SET_COMPLETE_STATE',
+                    type: types.SET_COMPLETE_STATE,
                     completeState: []
+                });
+                store.commit({
+                    type: types.SET_VIDEO_LIST,
+                    init: true
                 });
                 this.getVideoList();
             },
@@ -60,17 +66,17 @@ const createApp = function createApp(options) {
             },
 
             ...mapActions({
-                getChannelInfo: 'GET_CHANNEL_INFO'
+                getChannelInfo: types.GET_CHANNEL_INFO
             }),
             ...mapActions({
-                getSetList: 'GET_SET_LIST'
+                getSetList: types.GET_SET_LIST
             }),
             ...mapActions({
-                getVideoList: 'GET_VIDEO_lIST'
+                getVideoList: types.GET_VIDEO_lIST
             })
         },
         ...App,
-        ...(options || {})
+        ...options
     })
 };
 

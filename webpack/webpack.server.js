@@ -17,6 +17,7 @@ module.exports = Object.assign({}, base, {
         filename: "[name].js",
         libraryTarget: 'commonjs2'
     },
+    externals: Object.keys(require('../package.json').dependencies),
     plugins: [
         new webpack.DefinePlugin({
             'process.env.VUE_ENV': '"server"',
