@@ -20,11 +20,15 @@ var config = {
         loaders: [
             {
                 test: /\.vue$/,
-                loader: 'vue'
+                loader: 'vue!unicode'
             },
+            // {
+            //     test: /\.html$|\.jade|\.pug/,
+            //     loader: 'unicode'
+            // },
             {
                 test: /\.js$/,
-                loader: 'babel',
+                loader: 'unicode!babel',
                 include: projectRoot,
                 exclude: /node_modules/
             },

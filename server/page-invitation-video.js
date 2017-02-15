@@ -357,7 +357,7 @@ module.exports =
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	if(content.locals) module.exports = content.locals;
 	// add CSS to SSR context
-	__webpack_require__(8)("fd09db78", content, false);
+	__webpack_require__(8)("a812d3cc", content, false);
 
 /***/ },
 /* 35 */
@@ -461,7 +461,7 @@ module.exports =
 	    staticClass: "logo"
 	  }), _vm._v(" "), _c('div', {
 	    staticClass: "content"
-	  }, [_vm._v("\n    网易菠萝 "), _c('br'), _vm._v(" "), _c('b', [_vm._v("超好玩的视频社区")])]), _vm._v(" "), _c('a', {
+	  }, [_vm._v("\n    \\u7f51\\u6613\\u83e0\\u841d "), _c('br'), _vm._v(" "), _c('b', [_vm._v("\\u8d85\\u597d\\u73a9\\u7684\\u89c6\\u9891\\u793e\\u533a")])]), _vm._v(" "), _c('a', {
 	    attrs: {
 	      "href": "http://a.app.qq.com/o/simple.jsp?pkgname=com.netease.bolo.android"
 	    }
@@ -545,7 +545,7 @@ module.exports =
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	if(content.locals) module.exports = content.locals;
 	// add CSS to SSR context
-	__webpack_require__(8)("4e0b61f4", content, false);
+	__webpack_require__(8)("d35b3f2c", content, false);
 
 /***/ },
 /* 54 */
@@ -720,19 +720,19 @@ module.exports =
 	    staticClass: "ticket"
 	  }, [_c('div', {
 	    staticClass: "title"
-	  }, [_vm._v("免费观影码:")]), _vm._v(" "), _c('div', {
+	  }, [_vm._v("\\u514d\\u8d39\\u89c2\\u5f71\\u7801:")]), _vm._v(" "), _c('div', {
 	    staticClass: "info"
 	  }, [_c('div', {
 	    staticClass: "code"
 	  }, [_vm._v("2ag82m")]), _vm._v(" "), _c('div', {
 	    staticClass: "usage-tip"
-	  }, [_vm._v("您还可以有")]), _vm._v(" "), _c('span', [_vm._v("5 次使用机会")])])])
+	  }, [_vm._v("\\u60a8\\u8fd8\\u53ef\\u4ee5\\u6709")]), _vm._v(" "), _c('span', [_vm._v("5 \\u6b21\\u4f7f\\u7528\\u673a\\u4f1a")])])])
 	},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
 	  return _c('div', {
 	    staticClass: "tutorial"
-	  }, [_c('p', [_vm._v("参照下面的教程，赶紧上车！")]), _vm._v(" "), _c('div', {
+	  }, [_c('p', [_vm._v("\\u53c2\\u7167\\u4e0b\\u9762\\u7684\\u6559\\u7a0b\\uff0c\\u8d76\\u7d27\\u4e0a\\u8f66\\uff01")]), _vm._v(" "), _c('div', {
 	    staticClass: "icon-point"
-	  }), _vm._v(" "), _c('p', [_vm._v("1.下载\n      "), _c('span', [_vm._v("网易菠萝")])]), _vm._v(" "), _c('p', [_vm._v("2. 登录后进入个人中心-兑换码，填写你的观影码即可免费观看大力金刚第二季前5集视频！")])])
+	  }), _vm._v(" "), _c('p', [_vm._v("1.\\u4e0b\\u8f7d\n      "), _c('span', [_vm._v("\\u7f51\\u6613\\u83e0\\u841d")])]), _vm._v(" "), _c('p', [_vm._v("2. \\u767b\\u5f55\\u540e\\u8fdb\\u5165\\u4e2a\\u4eba\\u4e2d\\u5fc3-\\u5151\\u6362\\u7801\\uff0c\\u586b\\u5199\\u4f60\\u7684\\u89c2\\u5f71\\u7801\\u5373\\u53ef\\u514d\\u8d39\\u89c2\\u770b\\u5927\\u529b\\u91d1\\u521a\\u7b2c\\u4e8c\\u5b63\\u524d5\\u96c6\\u89c6\\u9891\\uff01")])])
 	}]}
 	module.exports.render._withStripped = true
 

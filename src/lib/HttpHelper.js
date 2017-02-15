@@ -13,7 +13,7 @@ function isTest(){
 }
 
 function isNew(){
-  return /bolo\.163\.com/.test(location.host);
+  return /bolo\.163\.com/.test(location.host) || qs.parse().new;
 }
 
 var host = qs.parse().test ? 'http://test.bolo.bobo.com' : 'http://m.live.netease.com';
@@ -30,6 +30,7 @@ var getHost = function(testHost,officialHost){
 var getOrigin = function(testHost,officialHost){
 
   testHost = testHost || defaultTestHost;
+  alert(isNew());
   officialHost = officialHost || (isNew() ? newOfficialHost : defaultOfficialHost);
 
   if(isTest()) return 'http://' + testHost;
