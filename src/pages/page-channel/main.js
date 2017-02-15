@@ -52,7 +52,7 @@ const createApp = function createApp(options) {
             },
 
             loadMore: function (event) {
-                if(this.isScrollToBottom(event.target) && !this.isLoading && !this.isAll) {
+                if(this.isScrollToBottom(event.target) && !this.loadingState && !this.completeState) {
                     this.getVideoList();
                 }
             },
