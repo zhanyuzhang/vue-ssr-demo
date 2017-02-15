@@ -1,4 +1,4 @@
-<template>
+<template src="">
   <div class="wrapper" @scroll="loadMore($event)" v-bind:data-id="userId" id="app" v-show="showState">
     <channel-info v-bind:channelInfo="channelInfo"></channel-info>
     <div class="channel-set">

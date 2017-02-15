@@ -4,7 +4,8 @@ import types from './types'
 
 console.log(store.state);
 store.replaceState(window.__SERVER_STATE__);
-window.__SERVER_STATE__ = null;
+
+console.log(store.state);
 
 export default createApp({
     el: '#app',

@@ -20,7 +20,7 @@ config.plugins.push(new webpack.DefinePlugin({
 Object.keys(config.entry).forEach(function(name) {
     config.plugins.push(new HtmlWebpackPlugin({
         filename: name + '-debug.html',
-        template: './templates/default-mobile.html',
+        template: './tpl.html',
         inject: true,
         chunks: [name]
     }));

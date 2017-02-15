@@ -11,7 +11,7 @@ const config = Object.assign({}, base, {
     output: {
         path: path.join(projectRoot, 'public'),
         filename: "scripts/[name]-[hash:10].js",
-        publicPath: 'http://img1.cache.netease.com/bobo/release/'
+        publicPath: '//img1.cache.netease.com/bobo/release/'
     }
 });
 
@@ -31,7 +31,7 @@ config.plugins.push(
 Object.keys(config.entry).forEach(function(name) {
     config.plugins.push(new HtmlWebpackPlugin({
         filename: name + '.html',
-        template: './templates/default-mobile.html',
+        template: './tpl.html',
         inject: true,
         chunks: [name]
     }));

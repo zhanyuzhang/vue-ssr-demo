@@ -46,10 +46,9 @@ var config = {
 function getEntries(globPath) {
     var files = glob.sync(globPath),
         entries = {};
-
     files.forEach(function(filepath) {
         var name = filepath.split('/').find(function (e) {
-            return /page-/.test(e);
+            return /^page-\w+/.test(e);
         });
         name && (entries[name] = filepath);
     });
@@ -62,10 +61,12 @@ var clientEntries = getEntries(path.join(projectRoot, 'src/pages/**/entry-client
 var serverEntries = getEntries(path.join(projectRoot, 'src/pages/**/entry-server.js'));
 
 Object.keys(clientEntries).forEach(function(name) {
+    console.log('the client\'s enter files are as follows:\n', clientEntries[name]);
     config.clientEntry[name] = clientEntries[name];
 });
 
 Object.keys(serverEntries).forEach(function(name) {
+    console.log('the server\'s enter files are as follows:\n', serverEntries[name]);
     config.serverEntry[name] = serverEntries[name];
 });
 
