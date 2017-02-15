@@ -9,7 +9,7 @@ const config = Object.assign({}, base, {
     entry: base.clientEntry,
     output: {
         path: path.join(projectRoot, 'public'),
-        filename: "scripts/[name]-debug.js"
+        filename: "scripts/[name]-debug-[hash:10].js"
     }
 });
 config.plugins.push(new webpack.DefinePlugin({
