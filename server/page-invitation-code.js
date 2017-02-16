@@ -368,7 +368,7 @@ module.exports =
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	if(content.locals) module.exports = content.locals;
 	// add CSS to SSR context
-	__webpack_require__(8)("f9dee8d4", content, false);
+	__webpack_require__(8)("3c09a848", content, false);
 
 /***/ },
 
@@ -479,20 +479,20 @@ module.exports =
 	    staticClass: "img"
 	  }), _vm._v(" "), _c('div', {
 	    staticClass: "intro"
-	  }, [_vm._v("\\u628a\\u89c2\\u5f71\\u7801\\u5206\\u4eab\\u7ed9\\u597d\\u53cb\\uff0c\\u53ef\\u8ba9\\u4ed6\\u4eec\\u514d\\u8d39\\u770b "), _c('sapn', [_vm._v("\\u5927\\u529b\\u91d1\\u521a\\u7b2c\\u4e8c\\u5b63")])], 1)])]), _vm._v(" "), _c('div', {
+	  }, [_vm._v("把观影码分享给好友，可让他们免费看 "), _c('sapn', [_vm._v("大力金刚第二季")])], 1)])]), _vm._v(" "), _c('div', {
 	    staticClass: "code-box"
 	  }, [_c('div', {
 	    staticClass: "title"
-	  }, [_vm._v("\\u53d1\\u9001\\u60a8\\u7684\\u89c2\\u5f71\\u7801")]), _vm._v(" "), _c('div', {
+	  }, [_vm._v("发送您的观影码")]), _vm._v(" "), _c('div', {
 	    staticClass: "code"
 	  }, [_vm._v(_vm._s(_vm.code))]), _vm._v(" "), _c('div', {
 	    staticClass: "usage-tip"
-	  }, [_vm._v("\\u60a8\\u8fd8\\u53ef\\u4ee5\\u6709 "), _c('span', [_vm._v(_vm._s(_vm.count) + " \\u6b21\\u4f7f\\u7528\\u673a\\u4f1a")])]), _vm._v(" "), _c('div', {
+	  }, [_vm._v("您还可以有 "), _c('span', [_vm._v(_vm._s(_vm.count) + " 次使用机会")])]), _vm._v(" "), _c('div', {
 	    staticClass: "share-btn",
 	    on: {
 	      "click": _vm.openShareView
 	    }
-	  }, [_vm._v("\\u5206\\u4eab\\u5230\\u793e\\u4ea4\\u5a92\\u4f53")]), _vm._v(" "), _c('div', [_vm._v(_vm._s(_vm.answer))])])])
+	  }, [_vm._v("分享到社交媒体")]), _vm._v(" "), _c('div', [_vm._v(_vm._s(_vm.answer))])])])
 	},staticRenderFns: []}
 	module.exports.render._withStripped = true
 

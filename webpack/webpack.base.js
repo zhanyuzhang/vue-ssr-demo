@@ -20,7 +20,7 @@ var config = {
         loaders: [
             {
                 test: /\.vue$/,
-                loader: 'vue!unicode'
+                loader: 'vue'
             },
             // {
             //     test: /\.html$|\.jade|\.pug/,
@@ -28,7 +28,7 @@ var config = {
             // },
             {
                 test: /\.js$/,
-                loader: 'unicode!babel',
+                loader: 'babel',
                 include: projectRoot,
                 exclude: /node_modules/
             },

@@ -2,6 +2,7 @@ const path = require('path');
 const projectRoot = path.resolve(__dirname, '../');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const EncodingPlugin = require('webpack-encoding-plugin');
 
 const base = require('./webpack.base');
 
@@ -25,6 +26,9 @@ config.plugins.push(
     new webpack.DefinePlugin({
         'isBrowser': true
     })
+    // new EncodingPlugin({
+    //     encoding: 'GB2312'
+    // })
 );
 
 // 生成对应的html

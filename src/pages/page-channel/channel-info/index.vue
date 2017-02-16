@@ -8,7 +8,7 @@
       <h2>{{ channelInfo.nick }}</h2>
       <h3>{{ channelInfo.intro }}</h3>
       <h4>
-        <span class="channel-info-follows">+ 关注</span>
+        <span class="channel-info-follows">+ 关注  </span>
         <span class="channel-info-fol-num">{{ channelInfo.followedCount }}</span>
         <span class="channel-info-fol-text">人已关注</span>
         <span class="channel-info-share">分享</span>

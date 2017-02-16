@@ -368,7 +368,7 @@ module.exports =
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	if(content.locals) module.exports = content.locals;
 	// add CSS to SSR context
-	__webpack_require__(8)("70b6452b", content, false);
+	__webpack_require__(8)("45f8be53", content, false);
 
 /***/ },
 

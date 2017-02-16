@@ -40,7 +40,7 @@
   import downloadBar from '../../components/download-bar-orange/index.vue'
 
   export default {
-    name: 'channel',
+    name: 'channel', // name
     components: {
       'channel-info': channelInfo,
       'set-info': setInfo,

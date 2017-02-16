@@ -3,6 +3,7 @@ var path = require('path'),
     colors = require('colors'),
     Ftp = require('ftp'),
     ProgressBar = require('progress'),
+    iconv = require('iconv-lite'),
     fs = require('fs');
 
 // 遍历本地文件
@@ -86,16 +87,21 @@ function makeDir(fileInfo, bar) {
 // 调用ftp.mkdir()创建目录，参数fileInfo的格式和checkFiles()的返回值一致，bar为进度条实例
 function putFile(fileInfo, bar) {
     return new Promise(function (resolve, reject) {
-        ftp.put(fileInfo.localDirPath, fileInfo.remoteDirPath, function (err) {
-            bar.tick({
-                filename: path.basename(fileInfo.localDirPath)
+        fs.readFile(fileInfo.localDirPath, 'utf-8', function (err, data) {
+            if (err) throw err;
+            // 因为FTP服务器不支持utf-8，所以要把数据流转成gbk.
+            var gbkData =  iconv.encode(data, 'gbk');;
+            ftp.put(gbkData, fileInfo.remoteDirPath, function (err) {
+                bar.tick({
+                    filename: path.basename(fileInfo.localDirPath)
+                });
+                if(err) {
+                    console.log((err.toString()).red);
+                    reject(err);
+                } else {
+                    resolve(fileInfo);
+                }
             });
-            if(err) {
-                console.log((err.toString()).red);
-                reject(err);
-            } else {
-                resolve(fileInfo);
-            }
         });
     });
 }
@@ -104,7 +110,7 @@ function upload() {
     var uploadDirectory = path.resolve(__dirname, './public/');
     var files = [];
     eachFile(uploadDirectory, function(p) {
-        !/.html/.test(p) && files.push(p); // 把不是html的文件放到上传队列
+        !/.html/.test(p) && files.push(p); // 把不是html的文件放到上传队列。因为html是服务器返回的，不用上传到cdn
     });
     var startTime = Date.now();
     var cachedFileList = getCachedFileList('cachedFileList.txt');

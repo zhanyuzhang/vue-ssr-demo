@@ -147,7 +147,7 @@ module.exports =
 	                }
 	            },
 
-	            // \u5224\u65ad\u6eda\u52a8\u6761\u662f\u5426\u5df2\u7ecf\u5230\u8fbe\u4e86\u5e95\u90e8
+	            // 判断滚动条是否已经到达了底部
 	            isScrollToBottom: function isScrollToBottom(wrapper) {
 	                var scrollHeight = wrapper.scrollHeight;
 	                var scrollTop = wrapper.scrollTop;
@@ -216,7 +216,7 @@ module.exports =
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	if(content.locals) module.exports = content.locals;
 	// add CSS to SSR context
-	__webpack_require__(8)("052b8970", content, false);
+	__webpack_require__(8)("b97e1e54", content, false);
 
 /***/ },
 /* 6 */
@@ -494,7 +494,7 @@ module.exports =
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
-	  name: 'channel',
+	  name: 'channel', // name
 	  components: {
 	    'channel-info': _index2.default,
 	    'set-info': _index4.default,
@@ -548,7 +548,7 @@ module.exports =
 	  /* script */
 	  __webpack_require__(17),
 	  /* template */
-	  __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"!!./../../../../node_modules/vue-loader/lib/template-compiler?id=data-v-4bb5809a!./../../../../node_modules/vue-loader/lib/selector?type=template&index=0!./../../../../node_modules/.1.0.6@unicode-loader/index.js!./index.vue\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())),
+	  __webpack_require__(18),
 	  /* scopeId */
 	  "data-v-4bb5809a",
 	  /* cssModules */
@@ -572,7 +572,7 @@ module.exports =
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	if(content.locals) module.exports = content.locals;
 	// add CSS to SSR context
-	__webpack_require__(8)("78cf2e5e", content, false);
+	__webpack_require__(8)("59f659bf", content, false);
 
 /***/ },
 /* 14 */
@@ -749,7 +749,35 @@ module.exports =
 	};
 
 /***/ },
-/* 18 */,
+/* 18 */
+/***/ function(module, exports) {
+
+	module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+	  return _c('div', {
+	    staticClass: "channel-info"
+	  }, [_c('div', {
+	    staticClass: "channel-info-bg1"
+	  }), _vm._v(" "), _c('div', {
+	    staticClass: "channel-info-avatar"
+	  }, [_c('img', {
+	    attrs: {
+	      "src": _vm.channelInfo.avatar
+	    }
+	  })]), _vm._v(" "), _c('div', {
+	    staticClass: "channel-info-title"
+	  }, [_c('h2', [_vm._v(_vm._s(_vm.channelInfo.nick))]), _vm._v(" "), _c('h3', [_vm._v(_vm._s(_vm.channelInfo.intro))]), _vm._v(" "), _c('h4', [_c('span', {
+	    staticClass: "channel-info-follows"
+	  }, [_vm._v("+ 关注 ")]), _vm._v(" "), _c('span', {
+	    staticClass: "channel-info-fol-num"
+	  }, [_vm._v(_vm._s(_vm.channelInfo.followedCount))]), _vm._v(" "), _c('span', {
+	    staticClass: "channel-info-fol-text"
+	  }, [_vm._v("人已关注")]), _vm._v(" "), _c('span', {
+	    staticClass: "channel-info-share"
+	  }, [_vm._v("分享")])])])])
+	},staticRenderFns: []}
+	module.exports.render._withStripped = true
+
+/***/ },
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -785,7 +813,7 @@ module.exports =
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	if(content.locals) module.exports = content.locals;
 	// add CSS to SSR context
-	__webpack_require__(8)("bbeb4d48", content, false);
+	__webpack_require__(8)("45fbbe3d", content, false);
 
 /***/ },
 /* 21 */
@@ -904,7 +932,7 @@ module.exports =
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	if(content.locals) module.exports = content.locals;
 	// add CSS to SSR context
-	__webpack_require__(8)("243f4478", content, false);
+	__webpack_require__(8)("b5fc774e", content, false);
 
 /***/ },
 /* 26 */
@@ -1014,20 +1042,20 @@ module.exports =
 	        differMinutes = 1;
 	      }
 	      if (differMinutes <= 59) {
-	        differStr = differMinutes + '\u5206\u949F\u524D';
+	        differStr = differMinutes + "分钟前";
 	      } else if (differMinutes > 59 && differMinutes < 1440) {
-	        differStr = Math.floor(differMinutes / 60) + '\u5C0F\u65F6\u524D';
+	        differStr = Math.floor(differMinutes / 60) + "小时前";
 	      } else if (differMinutes >= 1440 && differMinutes < 43200) {
-	        differStr = Math.floor(differMinutes / 60 / 24) + '\u5929\u524D';
+	        differStr = Math.floor(differMinutes / 60 / 24) + "天前";
 	      } else {
-	        differStr = Math.floor(differMinutes / 60 / 24 / 30) + '\u4E2A\u6708\u524D';
+	        differStr = Math.floor(differMinutes / 60 / 24 / 30) + "个月前";
 	      }
 	      return differStr;
 	    },
 	    formatDuration: function formatDuration(val) {
-	      var theTime = parseInt(val); // \u79d2
-	      var theTime1 = 0; // \u5206
-	      var theTime2 = 0; // \u5c0f\u65f6
+	      var theTime = parseInt(val); // 秒
+	      var theTime1 = 0; // 分
+	      var theTime2 = 0; // 小时
 	      if (theTime > 60) {
 	        theTime1 = parseInt(theTime / 60);
 	        theTime = parseInt(theTime % 60);
@@ -1101,7 +1129,7 @@ module.exports =
 	    staticClass: "channel-video-pt-ic"
 	  }), _vm._v(" "), _c('span', {
 	    staticClass: "channel-video-pt-num"
-	  }, [_vm._v(_vm._s(_vm.videoInfo.playCount))]), _vm._v(" "), _c('span', [_vm._v("\\u6b21")])]), _vm._v(" "), _c('div', {
+	  }, [_vm._v(_vm._s(_vm.videoInfo.playCount))]), _vm._v(" "), _c('span', [_vm._v("次")])]), _vm._v(" "), _c('div', {
 	    staticClass: "channel-video-bline"
 	  })])
 	},staticRenderFns: []}
@@ -1143,7 +1171,7 @@ module.exports =
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	if(content.locals) module.exports = content.locals;
 	// add CSS to SSR context
-	__webpack_require__(8)("a812d3cc", content, false);
+	__webpack_require__(8)("fd09db78", content, false);
 
 /***/ },
 /* 35 */
@@ -1247,7 +1275,7 @@ module.exports =
 	    staticClass: "logo"
 	  }), _vm._v(" "), _c('div', {
 	    staticClass: "content"
-	  }, [_vm._v("\n    \\u7f51\\u6613\\u83e0\\u841d "), _c('br'), _vm._v(" "), _c('b', [_vm._v("\\u8d85\\u597d\\u73a9\\u7684\\u89c6\\u9891\\u793e\\u533a")])]), _vm._v(" "), _c('a', {
+	  }, [_vm._v("\n    网易菠萝 "), _c('br'), _vm._v(" "), _c('b', [_vm._v("超好玩的视频社区")])]), _vm._v(" "), _c('a', {
 	    attrs: {
 	      "href": "http://a.app.qq.com/o/simple.jsp?pkgname=com.netease.bolo.android"
 	    }
@@ -1342,19 +1370,19 @@ module.exports =
 	}
 	var store = new _vuex2.default.Store({
 	    state: {
-	        pageNum: 1, // \u9875\u7801
-	        pageSize: 10, // \u6bcf\u9875\u7684\u6570\u636e\u91cf
-	        loadingState: false, // \u52a0\u8f7d\u72b6\u6001\uff0c\u662f\u5426\u6b63\u5728\u52a0\u8f7d\u6570\u636e
-	        showState: false, // \u9875\u9762\u662f\u5426\u53ef\u89c1\uff0c\u7528\u6765\u907f\u514d\u51fa\u73b0\u65e0\u6837\u5f0f\u7684\u5185\u5bb9
-	        completeState: false, // \u662f\u5426\u5df2\u7ecf\u52a0\u8f7d\u4e86\u5168\u90e8\u7684\u89c6\u9891\uff1f
-	        sid: null, // \u9009\u96c6ID
-	        activeSid: null, // \u5f53\u524d\u7684\u9009\u96c6ID
-	        userId: null, // \u7528\u6237/\u9891\u9053ID
-	        origin: null, // \u57df\u540d
+	        pageNum: 1, // 页码
+	        pageSize: 10, // 每页的数据量
+	        loadingState: false, // 加载状态，是否正在加载数据
+	        showState: false, // 页面是否可见，用来避免出现无样式的内容
+	        completeState: false, // 是否已经加载了全部的视频？
+	        sid: null, // 选集ID
+	        activeSid: null, // 当前的选集ID
+	        userId: null, // 用户/频道ID
+	        origin: null, // 域名
 	        channelInfo: {},
 	        lists: {
-	            setList: [], // \u9009\u96c6\u5217\u8868
-	            videoList: [] // \u89c6\u9891\u5217\u8868
+	            setList: [], // 选集列表
+	            videoList: [] // 视频列表
 	        }
 	    },
 	    actions: (_actions = {}, _defineProperty(_actions, _types2.default.GET_CHANNEL_INFO, function (context) {
