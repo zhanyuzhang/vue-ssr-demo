@@ -61,8 +61,8 @@ function getEntries(globPath) {
 }
 
 
-var clientEntries = getEntries(path.join(projectRoot, 'src/pages/**/entry-client.js'));
-var serverEntries = getEntries(path.join(projectRoot, 'src/pages/**/entry-server.js'));
+var clientEntries = getEntries(path.join(projectRoot, 'src/pages/**/entry-client.js')); // 浏览器端入口文件
+var serverEntries = getEntries(path.join(projectRoot, 'src/pages/**/entry-server.js')); // 服务器端入口文件
 
 Object.keys(clientEntries).forEach(function(name) {
     config.clientEntry[name] = clientEntries[name];
