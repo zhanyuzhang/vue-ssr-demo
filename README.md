@@ -1,4 +1,4 @@
-** A demo about vue2's server-side-render **
+**A demo about vue2's server-side-render**
 
 ## install Dependencies
 ``` npm install ```
