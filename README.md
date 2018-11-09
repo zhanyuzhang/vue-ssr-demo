@@ -17,7 +17,7 @@
 * the video invitation page
 ``` http://localhost:3000/m/invitation/video ```
 
-the code invitation page
+* the code invitation page
 ``` http://localhost:3000/m/invitation/code ```
 
 * 404 page
